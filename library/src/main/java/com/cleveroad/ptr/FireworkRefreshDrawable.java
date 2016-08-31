@@ -88,6 +88,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
      */
     private static final float CURVE_MAX_DEVIATION_PERCENT = 0.3f;
     private static final float CURVE_DY_STEP_TWO = 10;
+    private static final float CURVE_VERTICAL_POINT_PERCENT = 0.7f;
     private float mCurveDyStepTwo;
     private float mCurveLastTargetPointY;
 
@@ -174,7 +175,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     }
 
     private float getCurveYStart() {
-        return mParent.getTotalDragDistance() * (1.5f - Math.min(mPercent, 1.0f));
+        return mParent.getTotalDragDistance() * (1f + CURVE_VERTICAL_POINT_PERCENT - Math.min(mPercent, 1.0f));
     }
 
     private float getCurveYEnd() {

@@ -1,6 +1,8 @@
 package com.cleveroad.ptr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.DrawableRes;
@@ -35,6 +37,14 @@ public class Configuration {
     }
 
     /**
+     * Use this method to set rocket bitmap
+     * @param rocketBitmap
+     */
+    public void setRocketFromBitmap(Bitmap rocketBitmap) {
+        setRocketFromDrawable(new BitmapDrawable(mContext.getResources(), rocketBitmap));
+    }
+
+    /**
      * Use this method to set rocket drawable from resources
      * @param fireworkDrawableRes
      */
@@ -50,8 +60,16 @@ public class Configuration {
      * Use this method to set flame drawable
      * @param flameDrawable
      */
-    public void setFlameFromDrawable(@Nullable Drawable flameDrawable) {
+    public void setFlameFromDrawable(Drawable flameDrawable) {
         mFlameDrawable = flameDrawable;
+    }
+
+    /**
+     * Use this method to set flame bitmap
+     * @param flameBitmap
+     */
+    public void setFlameFromBitmap(Bitmap flameBitmap) {
+        setFlameFromDrawable(new BitmapDrawable(mContext.getResources(), flameBitmap));
     }
 
     /**
@@ -70,8 +88,16 @@ public class Configuration {
      * Use this method to set background drawable
      * @param backgroundDrawable
      */
-    public void setBackgroundFromDrawable(@Nullable Drawable backgroundDrawable) {
+    public void setBackgroundFromDrawable(Drawable backgroundDrawable) {
         mBackgroundDrawable = backgroundDrawable;
+    }
+
+    /**
+     * Use this method to set background bitmap
+     * @param backgroundBitmap
+     */
+    public void setBackgroundFromBitmap(Bitmap backgroundBitmap) {
+        setBackgroundFromDrawable(new BitmapDrawable(mContext.getResources(), backgroundBitmap));
     }
 
     /**

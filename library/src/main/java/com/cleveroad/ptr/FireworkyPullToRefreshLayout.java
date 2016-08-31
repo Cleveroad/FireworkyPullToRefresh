@@ -521,6 +521,6 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
          *
          * @return Whether it is possible for the child view of parent layout to scroll up.
          */
-        boolean canChildScrollUp(FireworkyPullToRefreshLayout parent, @Nullable View child);
+        boolean canChildScrollUp(@NonNull FireworkyPullToRefreshLayout parent, @Nullable View child);
     }
 }
