@@ -2,6 +2,9 @@
 
 Let's try to refresh your data with our library!
 
+<img src="/images/FireworkyPullToRefresh1.png" width="216" height="384" />
+<img src="/images/FireworkyPullToRefresh2.png" width="216" height="384" />
+
 ## Setup and usage ##
 ### Installation ###
 by Gradle:
