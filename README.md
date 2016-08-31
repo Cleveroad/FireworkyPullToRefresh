@@ -99,3 +99,14 @@ mPullToRefresh.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
             }
 });
 ```
+### Using custom views ###
+For using custom views just implement FireworkyPullToRefreshLayout.OnChildScrollUpCallback:
+```Java
+
+mPullToRefresh.setOnChildScrollUpCallback(new FireworkyPullToRefreshLayout.OnChildScrollUpCallback() {
+            @Override
+            public boolean canChildScrollUp(FireworkyPullToRefreshLayout parent, @Nullable View child) {
+                //put your implementation here
+            }
+});
+```
