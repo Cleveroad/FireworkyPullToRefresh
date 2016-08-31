@@ -1,4 +1,4 @@
-# Meet FireworkyPullToRefresh  - The layout with firework animation for Android by Cleveroad #
+# FireworkyPullToRefresh #
 
 Let's try to refresh your data with our library!
 
@@ -48,7 +48,13 @@ Just wrap your view:
         app:ptr_rocket="@drawable/rocket"
         app:ptr_rocketAnimDuration="1000">
 ```
-
+|  attribute name | description |
+|---|---|
+| ptr_fireworkColors  | An array of colors which will be used for firework animation |
+| ptr_flame  | An Drawable of rocket flame |
+| ptr_background  | Background drawable |
+| ptr_rocket  | Rocket drawable |
+| ptr_rocketAnimDuration  | rocket flight duration |
 ### Via Java code ###
 
 ```Java
