@@ -59,12 +59,15 @@ Just wrap your view:
 
 ```Java
 //use .config() methods:
+mPullToRefresh.getConfig().setRocketFromDrawable(fireworkRocketDrawable);
 mPullToRefresh.getConfig().setRocketFromBitmap(fireworkRocketBitmap);
 mPullToRefresh.getConfig().setRocketFromResources(R.drawable.fireworkRocket);
 
+mPullToRefresh.getConfig().setBackgroundFromDrawable(backgroundDrawable);
 mPullToRefresh.getConfig().setBackgroundFromBitmap(backgroundBitmap);
 mPullToRefresh.getConfig().setBackgroundFromResources(R.drawable.background);
 
+mPullToRefresh.getConfig().setFlameFromDrawable(flameDrawable);
 mPullToRefresh.getConfig().setFlameFromBitmap(flameBitmap);
 mPullToRefresh.getConfig().setFlameFromResources(R.drawable.flame);
 
@@ -88,7 +91,7 @@ mPullRefreshView.post(new Runnable() {
 ```
 
 ### Refreshing callback ###
-Just implement PullToRefreshView.OnRefreshListener:
+Just implement `PullToRefreshView.OnRefreshListener`:
 
 ```Java
 
@@ -100,7 +103,7 @@ mPullToRefresh.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
 });
 ```
 ### Using custom views ###
-For using custom views just implement FireworkyPullToRefreshLayout.OnChildScrollUpCallback:
+For using custom views just implement `FireworkyPullToRefreshLayout.OnChildScrollUpCallback`:
 ```Java
 
 mPullToRefresh.setOnChildScrollUpCallback(new FireworkyPullToRefreshLayout.OnChildScrollUpCallback() {
