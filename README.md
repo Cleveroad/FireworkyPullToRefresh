@@ -81,17 +81,6 @@ mPullToRefresh.getConfig().setRocketAnimDuration(1000L);
 ```
 
 ## Animation ##
-To start or stop animation:
-
-```Java
-mPullRefreshView.post(new Runnable() {
-    @Override
-    public void run() {
-        mPullRefreshView.setRefreshing(mIsRefreshing);
-    }
-});
-```
-
 ### Refreshing callback ###
 Just implement `PullToRefreshView.OnRefreshListener`:
 
@@ -100,10 +89,16 @@ Just implement `PullToRefreshView.OnRefreshListener`:
 mPullToRefresh.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
     @Override
     public void onRefresh() {
-                
+        //refresh your data here        
     }
 });
 ```
+###To start or stop animation:###
+
+```Java
+mPullRefreshView.setRefreshing(isRefreshing);
+```
+
 ### Using custom views ###
 For using custom views just implement `FireworkyPullToRefreshLayout.OnChildScrollUpCallback`:
 ```Java
