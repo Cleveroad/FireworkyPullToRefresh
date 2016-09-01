@@ -108,7 +108,7 @@ For using custom views just implement `FireworkyPullToRefreshLayout.OnChildScrol
 
 mPullToRefresh.setOnChildScrollUpCallback(new FireworkyPullToRefreshLayout.OnChildScrollUpCallback() {
             @Override
-            public boolean canChildScrollUp(FireworkyPullToRefreshLayout parent, @Nullable View child) {
+            public boolean canChildScrollUp(@NonNull FireworkyPullToRefreshLayout parent, @Nullable View child) {
                 //put your implementation here
             }
 });
