@@ -2,8 +2,7 @@
 
 Let's try to refresh your data with our library!
 
-<img src="/images/FireworkyPullToRefresh1.png" width="216" height="384" />
-<img src="/images/FireworkyPullToRefresh2.png" width="216" height="384" />
+<img src="/images/FireworkyPullToRefresh.gif" width="216" height="384" />
 
 ## Setup and usage ##
 ### Installation ###
@@ -11,7 +10,7 @@ by Gradle:
 ```groovy
     //coming soon
 ```
-or just download zip and import module "fireworky-pull-to-refresh to be able to modify the sources
+or just download zip and import module "fireworky-pull-to-refresh to be able to modify the sources.
 ### Supported Views ###
 
 * RecyclerView
@@ -57,7 +56,7 @@ Just wrap your view:
 | ptr_flame  | An Drawable of rocket flame |
 | ptr_background  | Background drawable |
 | ptr_rocket  | Rocket drawable |
-| ptr_rocketAnimDuration  | rocket flight duration |
+| ptr_rocketAnimDuration  | Rocket flight duration |
 ### Via Java code ###
 
 ```Java
@@ -86,10 +85,10 @@ To start or stop animation:
 
 ```Java
 mPullRefreshView.post(new Runnable() {
-            @Override
-            public void run() {
-                mPullRefreshView.setRefreshing(mIsRefreshing);
-            }
+    @Override
+    public void run() {
+        mPullRefreshView.setRefreshing(mIsRefreshing);
+    }
 });
 ```
 
@@ -99,10 +98,10 @@ Just implement `PullToRefreshView.OnRefreshListener`:
 ```Java
 
 mPullToRefresh.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+    @Override
+    public void onRefresh() {
                 
-            }
+    }
 });
 ```
 ### Using custom views ###
@@ -110,9 +109,9 @@ For using custom views just implement `FireworkyPullToRefreshLayout.OnChildScrol
 ```Java
 
 mPullToRefresh.setOnChildScrollUpCallback(new FireworkyPullToRefreshLayout.OnChildScrollUpCallback() {
-            @Override
-            public boolean canChildScrollUp(@NonNull FireworkyPullToRefreshLayout parent, @Nullable View child) {
-                //put your implementation here
-            }
+    @Override
+    public boolean canChildScrollUp(@NonNull FireworkyPullToRefreshLayout parent, @Nullable View child) {
+        //put your implementation here
+    }
 });
 ```
