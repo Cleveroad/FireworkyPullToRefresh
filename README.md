@@ -61,20 +61,20 @@ Just wrap your view:
 
 ```Java
 //use .config() methods:
-mPullToRefresh.getConfig().setRocketFromDrawable(fireworkRocketDrawable);
-mPullToRefresh.getConfig().setRocketFromBitmap(fireworkRocketBitmap);
-mPullToRefresh.getConfig().setRocketFromResources(R.drawable.fireworkRocket);
+mPullToRefresh.getConfig().setRocket(fireworkRocketDrawable);
+mPullToRefresh.getConfig().setRocket(fireworkRocketBitmap);
+mPullToRefresh.getConfig().setRocket(R.drawable.fireworkRocket);
 
-mPullToRefresh.getConfig().setBackgroundFromDrawable(backgroundDrawable);
-mPullToRefresh.getConfig().setBackgroundFromBitmap(backgroundBitmap);
-mPullToRefresh.getConfig().setBackgroundFromResources(R.drawable.background);
+mPullToRefresh.getConfig().setBackground(backgroundDrawable);
+mPullToRefresh.getConfig().setBackground(backgroundBitmap);
+mPullToRefresh.getConfig().setBackground(R.drawable.background);
 
-mPullToRefresh.getConfig().setFlameFromDrawable(flameDrawable);
-mPullToRefresh.getConfig().setFlameFromBitmap(flameBitmap);
-mPullToRefresh.getConfig().setFlameFromResources(R.drawable.flame);
+mPullToRefresh.getConfig().setFlame(flameDrawable);
+mPullToRefresh.getConfig().setFlame(flameBitmap);
+mPullToRefresh.getConfig().setFlame(R.drawable.flame);
 
 mPullToRefresh.getConfig().setFireworkColors(colorsIntArray);
-mPullToRefresh.getConfig().setFireworkColorsFromResources(R.array.fireworkColors);
+mPullToRefresh.getConfig().setFireworkColors(R.array.fireworkColors);
 
 mPullToRefresh.getConfig().setRocketAnimDuration(1000L);
 
