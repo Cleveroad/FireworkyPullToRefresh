@@ -6,7 +6,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import com.cleveroad.library.R;
@@ -32,7 +31,7 @@ public class Configuration {
      * Use this method to set rocket drawable
      * @param rocketDrawable
      */
-    public void setRocketFromDrawable(Drawable rocketDrawable) {
+    public void setRocket(Drawable rocketDrawable) {
         mRocketDrawable = rocketDrawable;
     }
 
@@ -40,15 +39,15 @@ public class Configuration {
      * Use this method to set rocket bitmap
      * @param rocketBitmap
      */
-    public void setRocketFromBitmap(Bitmap rocketBitmap) {
-        setRocketFromDrawable(new BitmapDrawable(mContext.getResources(), rocketBitmap));
+    public void setRocket(Bitmap rocketBitmap) {
+        setRocket(new BitmapDrawable(mContext.getResources(), rocketBitmap));
     }
 
     /**
      * Use this method to set rocket drawable from resources
      * @param fireworkDrawableRes
      */
-    public void setRocketFromResources(@DrawableRes int fireworkDrawableRes) {
+    public void setRocket(@DrawableRes int fireworkDrawableRes) {
         mRocketDrawable = ContextCompat.getDrawable(mContext, fireworkDrawableRes);
     }
 
@@ -60,7 +59,7 @@ public class Configuration {
      * Use this method to set flame drawable
      * @param flameDrawable
      */
-    public void setFlameFromDrawable(Drawable flameDrawable) {
+    public void setFlame(Drawable flameDrawable) {
         mFlameDrawable = flameDrawable;
     }
 
@@ -68,15 +67,15 @@ public class Configuration {
      * Use this method to set flame bitmap
      * @param flameBitmap
      */
-    public void setFlameFromBitmap(Bitmap flameBitmap) {
-        setFlameFromDrawable(new BitmapDrawable(mContext.getResources(), flameBitmap));
+    public void setFlame(Bitmap flameBitmap) {
+        setFlame(new BitmapDrawable(mContext.getResources(), flameBitmap));
     }
 
     /**
      * Use this method to set flame drawable from resources
      * @param flameDrawableRes
      */
-    public void setFlameFromResources(@DrawableRes int flameDrawableRes) {
+    public void setFlame(@DrawableRes int flameDrawableRes) {
         mFlameDrawable = ContextCompat.getDrawable(mContext, flameDrawableRes);
     }
 
@@ -88,7 +87,7 @@ public class Configuration {
      * Use this method to set background drawable
      * @param backgroundDrawable
      */
-    public void setBackgroundFromDrawable(Drawable backgroundDrawable) {
+    public void setBackground(Drawable backgroundDrawable) {
         mBackgroundDrawable = backgroundDrawable;
     }
 
@@ -96,15 +95,15 @@ public class Configuration {
      * Use this method to set background bitmap
      * @param backgroundBitmap
      */
-    public void setBackgroundFromBitmap(Bitmap backgroundBitmap) {
-        setBackgroundFromDrawable(new BitmapDrawable(mContext.getResources(), backgroundBitmap));
+    public void setBackground(Bitmap backgroundBitmap) {
+        setBackground(new BitmapDrawable(mContext.getResources(), backgroundBitmap));
     }
 
     /**
      * Use this method to set background drawable from resources
      * @param backgroundDrawableRes
      */
-    public void setBackgroundFromResources(@DrawableRes int backgroundDrawableRes) {
+    public void setBackground(@DrawableRes int backgroundDrawableRes) {
         mBackgroundDrawable = ContextCompat.getDrawable(mContext, backgroundDrawableRes);
     }
 
@@ -131,7 +130,7 @@ public class Configuration {
      * Use this method to set firework color set from resources
      * @param fireworkColorsResources
      */
-    public void setFireworkColorsFromResources(@ArrayRes int fireworkColorsResources) {
+    public void setFireworkColors(@ArrayRes int fireworkColorsResources) {
         mFireworkColors = mContext.getResources().getIntArray(fireworkColorsResources);
     }
 
