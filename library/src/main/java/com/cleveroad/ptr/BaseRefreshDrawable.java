@@ -15,7 +15,7 @@ abstract class BaseRefreshDrawable extends Drawable implements Drawable.Callback
 
     private FireworkyPullToRefreshLayout mRefreshLayout;
 
-    BaseRefreshDrawable(Context context, FireworkyPullToRefreshLayout mRefreshLayout) {
+    BaseRefreshDrawable(FireworkyPullToRefreshLayout mRefreshLayout) {
         this.mRefreshLayout = mRefreshLayout;
     }
 

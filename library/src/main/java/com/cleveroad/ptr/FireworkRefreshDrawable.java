@@ -29,7 +29,6 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path mPath = new Path();
 
-    private Context mContext;
     private FireworkyPullToRefreshLayout mParent;
 
     private boolean mIsAnimationStarted = false;
@@ -77,10 +76,10 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     /**
      * Firework
      */
-    private static final int MAX_FIREWORKS_COUNT = 3;
+    private static final int MAX_FIREWORKS_COUNT = 50;
     private static final int MAX_VISIBLE_FIREWORKS_COUNT = 2;
     private final Queue<List<Bubble>> mFireworksQueue = new LinkedList<>();
-    private final List<List<Bubble>> mFireworksList = new LinkedList<>();
+    private final List<List<Bubble>> mVisibleFireworksList = new LinkedList<>();
     private int mFireworkBubbleRadius;
 
     /**
@@ -90,16 +89,13 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private static final float CURVE_DY_STEP_TWO = 10;
     private static final float CURVE_VERTICAL_POINT_PERCENT = 0.7f;
     private float mCurveDyStepTwo;
-    private float mCurveLastTargetPointY;
-
     /**
      * Constructor
      */
-    FireworkRefreshDrawable(Context context, final FireworkyPullToRefreshLayout layout) {
-        super(context, layout);
+    FireworkRefreshDrawable(final FireworkyPullToRefreshLayout layout) {
+        super(layout);
         mParent = layout;
-        mContext = getContext();
-        mConfig = new Configuration(context);
+        mConfig = new Configuration(getContext());
 
         layout.post(new Runnable() {
             @Override
@@ -123,7 +119,8 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
         mRocketTopOffset = mParent.getTotalDragDistance()
                 - mConfig.getRocketDrawable().getIntrinsicHeight()
-                - mConfig.getFlameDrawable().getIntrinsicHeight() / 2f;
+                - mConfig.getFlameDrawable().getIntrinsicHeight() / 2f
+                + mConfig.getRocketDrawable().getIntrinsicHeight() / 10f;
 
         mTop = -mParent.getTotalDragDistance();
 
@@ -158,7 +155,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         mPath.reset();
         mPath.moveTo(0, getCurveYStart());
         mPath.lineTo(getCurveXStart(), getCurveYStart());
-        mPath.quadTo(getCurveTargetPointX(), mCurveLastTargetPointY = getCurveTargetPointY(), getCurveXEnd(), getCurveYEnd());
+        mPath.quadTo(getCurveTargetPointX(), getCurveTargetPointY(), getCurveXEnd(), getCurveYEnd());
         mPath.lineTo(getCurveXEnd(), canvas.getWidth());
         mPath.lineTo(canvas.getWidth(), canvas.getHeight());
         mPath.lineTo(0, canvas.getHeight());
@@ -223,9 +220,9 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
             backgroundScale = BACKGROUND_INITIAL_SCALE;
         }
 
-        canvas.scale(backgroundScale, backgroundScale);
+        canvas.scale(backgroundScale, backgroundScale, canvas.getWidth() / 2f, mParent.getTotalDragDistance() / 2f);
 
-        mConfig.getBackgroundDrawable().setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        mConfig.getBackgroundDrawable().setBounds(0, 0, canvas.getWidth(), mParent.getTotalDragDistance());
         mConfig.getBackgroundDrawable().draw(canvas);
         canvas.restore();
     }
@@ -363,21 +360,25 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private void initFireworkList(final Canvas canvas) {
         mFireworksQueue.clear();
 
-        float height = mParent.getTotalDragDistance();
         float width = canvas.getWidth();
+        float height = getCurveYStart();
 
         float fireworkWidth = width / MAX_FIREWORKS_COUNT;
 
         for(int i = 0; i < MAX_FIREWORKS_COUNT; i++) {
             List<Bubble> firework = new ArrayList<>(20);
             mFireworksQueue.add(firework);
+
+            float x = RND.nextInt((int) (width - fireworkWidth / 2.));
+            float y = fireworkWidth / 2 + RND.nextInt((int) (height / 2));
+
             Bubble.Builder builder = Bubble.newBuilder()
-                    .position(new Bubble.Point(i * fireworkWidth + fireworkWidth / 2, height / 4.f))
+                    .position(new Bubble.Point(x + fireworkWidth / 2, y))
                     .dRotationAngle(0.01d);
 
             firework.addAll(Arrays.asList(
                     builder.dPosition(+0.f, +0.f).color(getRandomBubbleColor())
-                            .radius(mFireworkBubbleRadius * .2f).dRadius(.1f).alpha(200).dAlpha(-1.7f).build(), //center
+                            .radius(mFireworkBubbleRadius * .2f).dRadius(.1f).alpha(255).dAlpha(-1.7f).build(), //center
 
                     builder.dPosition(+.5f, +.0f).color(getRandomBubbleColor())
                             .radius(mFireworkBubbleRadius * .4f).dRadius(-.1f).dAlpha(-.8f).build(), //to right
@@ -405,15 +406,26 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                     builder.dPosition(+.0f, -.5f).color(getRandomBubbleColor()).build()  //to top
             ));
 
+
+            float radiusRandom = RND.nextFloat() * (1f - 0.7f) + 0.7f;
+            float alphaRandom = RND.nextFloat() * (1f - 0.7f) + 0.7f;
+
             for(int j=0, size = firework.size(); j < size; j++) {
+                double rotationAngle = RND.nextDouble() * 2;
                 Bubble inBubble = firework.get(j);
                 Bubble.Point dPosition = inBubble.getDPosition();
                 inBubble.setDPosition(new Bubble.Point(dPosition.getX(), dPosition.getY()));
+                inBubble.setRotationAngle(rotationAngle);
+                inBubble.setDRadius(inBubble.getDRadius() * radiusRandom);
+                inBubble.setDAlpha(inBubble.getDAlpha() * alphaRandom);
                 inBubble.updateInitialState();
 
                 Bubble outBubble = new Bubble(inBubble);
                 outBubble.setDRotationAngle(inBubble.getDRotationAngle() * -1);
                 outBubble.setColor(getRandomBubbleColor());
+                outBubble.setRotationAngle(rotationAngle);
+                outBubble.setDRadius(outBubble.getDRadius() * radiusRandom);
+                outBubble.setDAlpha(outBubble.getDAlpha() * alphaRandom);
                 outBubble.updateInitialState();
                 firework.add(outBubble);
             }
@@ -425,21 +437,13 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
             return;
         }
 
-        if (mFireworksQueue.isEmpty()) {
-            initFireworkList(canvas);
+        for(int count = MAX_VISIBLE_FIREWORKS_COUNT - mVisibleFireworksList.size(); count >= 0; count--) {
+            List<Bubble> newFirework = getFireworksQueue(canvas).poll();
+            mVisibleFireworksList.add(newFirework);
         }
 
-        if (mFireworksList.isEmpty()) {
-            List<Bubble> newFirework = mFireworksQueue.poll();
-            for (Bubble b : newFirework) {
-                b.reset();
-            }
-            mFireworksList.add(newFirework);
-            mFireworksQueue.add(newFirework);
-        }
-
-        for (int i = 0; i < mFireworksList.size(); i++) {
-            List<Bubble> firework = mFireworksList.get(i);
+        for (int i = 0; i < mVisibleFireworksList.size(); i++) {
+            List<Bubble> firework = mVisibleFireworksList.get(i);
             boolean isFireworkFinished = true;
             boolean isNeedToShowNextFirework = true;
 
@@ -450,34 +454,33 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 float radius = b.incrementRadiusAndGet();
                 canvas.drawCircle(
                         b.incrementXAndGet(),
-                        Math.min(
-                                b.incrementYAndGet(),
-                                BezierCurveHelper.quadTo(
-                                        getCurveYStart(),
-                                        getCurveYEnd(),
-                                        mCurveLastTargetPointY,
-                                        b.getXPos() / canvas.getWidth()) - radius
-                        ),
+                        b.incrementYAndGet(),
                         radius,
                         mPaint);
                 isFireworkFinished &= b.isInvisible();
-                isNeedToShowNextFirework &= b.getPercent() > 0.5f;
+                isNeedToShowNextFirework &= b.getPercent() > 0.65f;
             }
 
             if (isFireworkFinished) {
-                mFireworksList.remove(i);
+                mVisibleFireworksList.remove(i);
                 i--;
                 continue;
             }
-            if (isNeedToShowNextFirework && mFireworksList.size() < MAX_VISIBLE_FIREWORKS_COUNT) {
-                List<Bubble> newFirework = mFireworksQueue.poll();
+            if (isNeedToShowNextFirework && mVisibleFireworksList.size() < MAX_VISIBLE_FIREWORKS_COUNT) {
+                List<Bubble> newFirework = getFireworksQueue(canvas).poll();
                 for (Bubble b : newFirework) {
                     b.reset();
                 }
-                mFireworksList.add(newFirework);
-                mFireworksQueue.add(newFirework);
+                mVisibleFireworksList.add(newFirework);
             }
         }
+    }
+
+    private Queue<List<Bubble>> getFireworksQueue(Canvas canvas) {
+        if (mFireworksQueue.isEmpty()) {
+            initFireworkList(canvas);
+        }
+        return mFireworksQueue;
     }
 
     private void drawRocketSmoke(Canvas canvas) {
@@ -594,7 +597,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
     private void resetOrigins() {
         setPercent(0f);
-        mFireworksList.clear();
+        mVisibleFireworksList.clear();
         mRocketSmokeBubbles.clear();
 
         mCurveDyStepTwo = 0f;

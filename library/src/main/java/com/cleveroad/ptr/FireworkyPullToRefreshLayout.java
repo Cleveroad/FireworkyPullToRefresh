@@ -143,7 +143,7 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
 
         mRefreshView = new ImageView(context);
         mTotalDragDistance = Utils.convertDpToPixel(context, ROCKET_DRAG_MAX_DISTANCE);
-        mRefreshView.setImageDrawable(mRefreshDrawable = new FireworkRefreshDrawable(context, this));
+        mRefreshView.setImageDrawable(mRefreshDrawable = new FireworkRefreshDrawable(this));
         mConfig =  mRefreshDrawable.getConfig();
 
         readAttributes(context, attrs);
@@ -164,7 +164,7 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
             getConfig().setFlame(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_flame, R.drawable.ptr_ic_flame));
             getConfig().setRocket(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_rocket, R.drawable.ptr_ic_firework));
             getConfig().setFireworkColors(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_fireworkColors, R.array.ptr_defColorSet));
-            getConfig().setRocketAnimDuration(array.getInteger(R.styleable.FireworkyPullToRefreshLayout_ptr_rocketAnimDuration, 1000));
+            getConfig().setRocketAnimDuration(array.getInteger(R.styleable.FireworkyPullToRefreshLayout_ptr_rocketAnimDuration, 500));
         } finally {
             array.recycle();
         }
