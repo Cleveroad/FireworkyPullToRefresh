@@ -1,8 +1,8 @@
 package com.cleveroad.ptr;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -578,7 +578,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 }
             }
         });
-        mRocketAnimator.addListener(new SimpleAnimatorListener() {
+        mRocketAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mIsRocketAnimationFinished = true;
