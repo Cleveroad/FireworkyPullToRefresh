@@ -76,8 +76,8 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     /**
      * Firework
      */
-    private static final int MAX_FIREWORKS_COUNT = 50;
-    private static final int MAX_VISIBLE_FIREWORKS_COUNT = 2;
+    private static final int MAX_FIREWORKS_COUNT = 10;
+    private static final int MAX_VISIBLE_FIREWORKS_COUNT = 1;
     private final Queue<List<Bubble>> mFireworksQueue = new LinkedList<>();
     private final List<List<Bubble>> mVisibleFireworksList = new LinkedList<>();
     private int mFireworkBubbleRadius;
@@ -370,40 +370,41 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
             mFireworksQueue.add(firework);
 
             float x = RND.nextInt((int) (width - fireworkWidth / 2.));
-            float y = fireworkWidth / 2 + RND.nextInt((int) (height / 2));
+            float y = RND.nextInt((int) (height * 0.6f  - fireworkWidth)) + fireworkWidth / 2f;
 
             Bubble.Builder builder = Bubble.newBuilder()
                     .position(new Bubble.Point(x + fireworkWidth / 2, y))
                     .dRotationAngle(0.01d);
 
+            int color = getRandomBubbleColor();
             firework.addAll(Arrays.asList(
-                    builder.dPosition(+0.f, +0.f).color(getRandomBubbleColor())
+                    builder.dPosition(+0.f, +0.f).color(color)
                             .radius(mFireworkBubbleRadius * .2f).dRadius(.1f).alpha(255).dAlpha(-1.7f).build(), //center
 
-                    builder.dPosition(+.5f, +.0f).color(getRandomBubbleColor())
+                    builder.dPosition(+.5f, +.0f)
                             .radius(mFireworkBubbleRadius * .4f).dRadius(-.1f).dAlpha(-.8f).build(), //to right
-                    builder.dPosition(-.5f, +.0f).color(getRandomBubbleColor()).build(), //to left
-                    builder.dPosition(+.0f, +.5f).color(getRandomBubbleColor()).build(), //to bottom
-                    builder.dPosition(+.0f, -.5f).color(getRandomBubbleColor()).build(), //to top
+                    builder.dPosition(-.5f, +.0f).build(), //to left
+                    builder.dPosition(+.0f, +.5f).build(), //to bottom
+                    builder.dPosition(+.0f, -.5f).build(), //to top
 
                     //small diagonal bubbles
-                    builder.dPosition(-.6f, -.6f).color(getRandomBubbleColor())
+                    builder.dPosition(-.6f, -.6f)
                             .radius(mFireworkBubbleRadius * .1f).dRadius(+.05f).dAlpha(-1.5f).build(), //to left top
-                    builder.dPosition(-.6f, +.6f).color(getRandomBubbleColor()).build(), //to left bottom
-                    builder.dPosition(+.6f, -.6f).color(getRandomBubbleColor()).build(), //to right top
-                    builder.dPosition(+.6f, +.6f).color(getRandomBubbleColor()).build(), //to right bottom
+                    builder.dPosition(-.6f, +.6f).build(), //to left bottom
+                    builder.dPosition(+.6f, -.6f).build(), //to right top
+                    builder.dPosition(+.6f, +.6f).build(), //to right bottom
 
-                    builder.dPosition(-.3f, -.3f).color(getRandomBubbleColor())
+                    builder.dPosition(-.3f, -.3f)
                             .radius(mFireworkBubbleRadius * .1f).dRadius(+.1f).alpha(100).dAlpha(-.9f).build(), //to left top
-                    builder.dPosition(-.3f, +.3f).color(getRandomBubbleColor()).build(), //to left bottom
-                    builder.dPosition(+.3f, -.3f).color(getRandomBubbleColor()).build(), //to right top
-                    builder.dPosition(+.3f, +.3f).color(getRandomBubbleColor()).build(), //to right bottom
+                    builder.dPosition(-.3f, +.3f).build(), //to left bottom
+                    builder.dPosition(+.3f, -.3f).build(), //to right top
+                    builder.dPosition(+.3f, +.3f).build(), //to right bottom
 
-                    builder.dPosition(+.5f, +.0f).color(getRandomBubbleColor())
+                    builder.dPosition(+.5f, +.0f)
                             .radius(mFireworkBubbleRadius * .4f).dRadius(-.2f).alpha(100).dAlpha(-.8f).build(), //to right
-                    builder.dPosition(-.5f, +.0f).color(getRandomBubbleColor()).build(), //to left
-                    builder.dPosition(+.0f, +.5f).color(getRandomBubbleColor()).build(), //to bottom
-                    builder.dPosition(+.0f, -.5f).color(getRandomBubbleColor()).build()  //to top
+                    builder.dPosition(-.5f, +.0f).build(), //to left
+                    builder.dPosition(+.0f, +.5f).build(), //to bottom
+                    builder.dPosition(+.0f, -.5f).build()  //to top
             ));
 
 
@@ -422,7 +423,6 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
                 Bubble outBubble = new Bubble(inBubble);
                 outBubble.setDRotationAngle(inBubble.getDRotationAngle() * -1);
-                outBubble.setColor(getRandomBubbleColor());
                 outBubble.setRotationAngle(rotationAngle);
                 outBubble.setDRadius(outBubble.getDRadius() * radiusRandom);
                 outBubble.setDAlpha(outBubble.getDAlpha() * alphaRandom);
@@ -433,11 +433,11 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     }
 
     private void drawFireworks(final Canvas canvas) {
-        if (!mIsAnimationStarted || mRocketAnimationPercent < 0.75f) {
+        if (!mIsAnimationStarted || mRocketAnimationPercent < 0.95f) {
             return;
         }
 
-        for(int count = MAX_VISIBLE_FIREWORKS_COUNT - mVisibleFireworksList.size(); count >= 0; count--) {
+        for(int count = MAX_VISIBLE_FIREWORKS_COUNT - mVisibleFireworksList.size(); count > 0; count--) {
             List<Bubble> newFirework = getFireworksQueue(canvas).poll();
             mVisibleFireworksList.add(newFirework);
         }
@@ -458,7 +458,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                         radius,
                         mPaint);
                 isFireworkFinished &= b.isInvisible();
-                isNeedToShowNextFirework &= b.getPercent() > 0.65f;
+                isNeedToShowNextFirework &= b.getPercent() > 0.75f;
             }
 
             if (isFireworkFinished) {

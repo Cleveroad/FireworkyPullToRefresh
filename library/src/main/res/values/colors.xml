@@ -1,46 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ptr_bubble1">#6fa7d7</color>
-    <color name="ptr_bubble2">#4858af</color>
-    <color name="ptr_bubble3">#5940fc</color>
-    <color name="ptr_bubble4">#40cdfc</color>
-    <color name="ptr_bubble5">#2e9cc1</color>
-    <color name="ptr_bubble6">#73c0da</color>
-    <color name="ptr_bubble7">#8165cf</color>
-    <color name="ptr_bubble8">#57e4b2</color>
-    <color name="ptr_bubble9">#10afed</color>
-    <color name="ptr_bubble10">#68cf9a</color>
-    <color name="ptr_bubble11">#913fcc</color>
-    <color name="ptr_bubble12">#6b8bf5</color>
-    <color name="ptr_bubble13">#64ceaa</color>
-    <color name="ptr_bubble14">#2e609c</color>
-    <color name="ptr_bubble15">#77c672</color>
-    <color name="ptr_bubble16">#c9d962</color>
-    <color name="ptr_bubble17">#cf9665</color>
-    <color name="ptr_bubble18">#cf7865</color>
-    <color name="ptr_bubble19">#cf6571</color>
-    <color name="ptr_bubble20">#93de6b</color>
+    <color name="ptr_bubble1">#ff3b3b</color>
+    <color name="ptr_bubble2">#e6ff00</color>
+    <color name="ptr_bubble3">#69f93e</color>
+
+
+    <!--<color name="ptr_bubble1">#6fa7d7</color>-->
+    <!--<color name="ptr_bubble2">#4858af</color>-->
+    <!--<color name="ptr_bubble3">#5940fc</color>-->
+    <!--<color name="ptr_bubble4">#40cdfc</color>-->
+    <!--<color name="ptr_bubble5">#2e9cc1</color>-->
+    <!--<color name="ptr_bubble6">#73c0da</color>-->
+    <!--<color name="ptr_bubble7">#8165cf</color>-->
+    <!--<color name="ptr_bubble8">#57e4b2</color>-->
+    <!--<color name="ptr_bubble9">#10afed</color>-->
+    <!--<color name="ptr_bubble10">#68cf9a</color>-->
+    <!--<color name="ptr_bubble11">#913fcc</color>-->
+    <!--<color name="ptr_bubble12">#6b8bf5</color>-->
+    <!--<color name="ptr_bubble13">#64ceaa</color>-->
+    <!--<color name="ptr_bubble14">#2e609c</color>-->
+    <!--<color name="ptr_bubble15">#77c672</color>-->
+    <!--<color name="ptr_bubble16">#c9d962</color>-->
+    <!--<color name="ptr_bubble17">#cf9665</color>-->
+    <!--<color name="ptr_bubble18">#cf7865</color>-->
+    <!--<color name="ptr_bubble19">#cf6571</color>-->
+    <!--<color name="ptr_bubble20">#93de6b</color>-->
 
     <integer-array name="ptr_defColorSet">
         <item>@color/ptr_bubble1</item>
         <item>@color/ptr_bubble2</item>
         <item>@color/ptr_bubble3</item>
-        <item>@color/ptr_bubble4</item>
-        <item>@color/ptr_bubble5</item>
-        <item>@color/ptr_bubble6</item>
-        <item>@color/ptr_bubble7</item>
-        <item>@color/ptr_bubble8</item>
-        <item>@color/ptr_bubble9</item>
-        <item>@color/ptr_bubble10</item>
-        <item>@color/ptr_bubble11</item>
-        <item>@color/ptr_bubble12</item>
-        <item>@color/ptr_bubble13</item>
-        <item>@color/ptr_bubble14</item>
-        <item>@color/ptr_bubble15</item>
-        <item>@color/ptr_bubble16</item>
-        <item>@color/ptr_bubble17</item>
-        <item>@color/ptr_bubble18</item>
-        <item>@color/ptr_bubble19</item>
-        <item>@color/ptr_bubble20</item>
+        <!--<item>@color/ptr_bubble4</item>-->
+        <!--<item>@color/ptr_bubble5</item>-->
+        <!--<item>@color/ptr_bubble6</item>-->
+        <!--<item>@color/ptr_bubble7</item>-->
+        <!--<item>@color/ptr_bubble8</item>-->
+        <!--<item>@color/ptr_bubble9</item>-->
+        <!--<item>@color/ptr_bubble10</item>-->
+        <!--<item>@color/ptr_bubble11</item>-->
+        <!--<item>@color/ptr_bubble12</item>-->
+        <!--<item>@color/ptr_bubble13</item>-->
+        <!--<item>@color/ptr_bubble14</item>-->
+        <!--<item>@color/ptr_bubble15</item>-->
+        <!--<item>@color/ptr_bubble16</item>-->
+        <!--<item>@color/ptr_bubble17</item>-->
+        <!--<item>@color/ptr_bubble18</item>-->
+        <!--<item>@color/ptr_bubble19</item>-->
+        <!--<item>@color/ptr_bubble20</item>-->
     </integer-array>
 </resources>
