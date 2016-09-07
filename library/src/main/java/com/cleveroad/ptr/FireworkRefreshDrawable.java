@@ -14,7 +14,6 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -76,8 +75,8 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     /**
      * Firework
      */
-    private static final int MAX_FIREWORKS_COUNT = 10;
-    private static final int MAX_VISIBLE_FIREWORKS_COUNT = 1;
+    private static final int MAX_FIREWORKS_COUNT = 50;
+    private static final int MAX_VISIBLE_FIREWORKS_COUNT = 2;
     private final Queue<List<Bubble>> mFireworksQueue = new LinkedList<>();
     private final List<List<Bubble>> mVisibleFireworksList = new LinkedList<>();
     private int mFireworkBubbleRadius;
@@ -366,68 +365,51 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         float fireworkWidth = width / MAX_FIREWORKS_COUNT;
 
         for(int i = 0; i < MAX_FIREWORKS_COUNT; i++) {
-            List<Bubble> firework = new ArrayList<>(20);
+            List<Bubble> firework = new ArrayList<>(50);
             mFireworksQueue.add(firework);
 
-            float x = RND.nextInt((int) (width - fireworkWidth / 2.));
+            float x = RND.nextInt((int) (width - fireworkWidth / 2.)) + fireworkWidth / 2;
             float y = RND.nextInt((int) (height * 0.6f  - fireworkWidth)) + fireworkWidth / 2f;
 
             Bubble.Builder builder = Bubble.newBuilder()
-                    .position(new Bubble.Point(x + fireworkWidth / 2, y))
+                    .position(new Bubble.Point(x, y))
                     .dRotationAngle(0.01d);
 
             int color = getRandomBubbleColor();
-            firework.addAll(Arrays.asList(
-                    builder.dPosition(+0.f, +0.f).color(color)
-                            .radius(mFireworkBubbleRadius * .2f).dRadius(.1f).alpha(255).dAlpha(-1.7f).build(), //center
+            builder.dPosition(0.f, 0.f).color(color)
+                    .radius(mFireworkBubbleRadius * .2f).dRadius(.1f).alpha(255).dAlpha(-1.7f).build(); //center
 
-                    builder.dPosition(+.5f, +.0f)
-                            .radius(mFireworkBubbleRadius * .4f).dRadius(-.1f).dAlpha(-.8f).build(), //to right
-                    builder.dPosition(-.5f, +.0f).build(), //to left
-                    builder.dPosition(+.0f, +.5f).build(), //to bottom
-                    builder.dPosition(+.0f, -.5f).build(), //to top
+            color = getRandomBubbleColor();
+            for(int k = 360 / 45; k >= 0; k--) {
+                firework.add(builder
+                        .dPosition(Utils.rotateX(.7f, 0, 0, 0, k * 45), Utils.rotateY(.7f, 0, 0, 0, k * 45))
+                        .radius(mFireworkBubbleRadius * .4f)
+                        .dRadius(-.15f)
+                        .dAlpha(-.8f)
+                        .color(color)
+                        .build());
+            }
 
-                    //small diagonal bubbles
-                    builder.dPosition(-.6f, -.6f)
-                            .radius(mFireworkBubbleRadius * .1f).dRadius(+.05f).dAlpha(-1.5f).build(), //to left top
-                    builder.dPosition(-.6f, +.6f).build(), //to left bottom
-                    builder.dPosition(+.6f, -.6f).build(), //to right top
-                    builder.dPosition(+.6f, +.6f).build(), //to right bottom
+            color = getRandomBubbleColor();
+            for(int k = 360 / 30; k >= 0; k--) {
+                firework.add(builder
+                        .dPosition(Utils.rotateX(.5f, 0, 0, 0, k * 30), Utils.rotateY(.5f, 0, 0, 0, k * 30))
+                        .radius(mFireworkBubbleRadius * .2f)
+                        .dRadius(-.1f)
+                        .dAlpha(-.8f)
+                        .color(color)
+                        .build());
+            }
 
-                    builder.dPosition(-.3f, -.3f)
-                            .radius(mFireworkBubbleRadius * .1f).dRadius(+.1f).alpha(100).dAlpha(-.9f).build(), //to left top
-                    builder.dPosition(-.3f, +.3f).build(), //to left bottom
-                    builder.dPosition(+.3f, -.3f).build(), //to right top
-                    builder.dPosition(+.3f, +.3f).build(), //to right bottom
-
-                    builder.dPosition(+.5f, +.0f)
-                            .radius(mFireworkBubbleRadius * .4f).dRadius(-.2f).alpha(100).dAlpha(-.8f).build(), //to right
-                    builder.dPosition(-.5f, +.0f).build(), //to left
-                    builder.dPosition(+.0f, +.5f).build(), //to bottom
-                    builder.dPosition(+.0f, -.5f).build()  //to top
-            ));
-
-
-            float radiusRandom = RND.nextFloat() * (1f - 0.7f) + 0.7f;
-            float alphaRandom = RND.nextFloat() * (1f - 0.7f) + 0.7f;
-
-            for(int j=0, size = firework.size(); j < size; j++) {
-                double rotationAngle = RND.nextDouble() * 2;
-                Bubble inBubble = firework.get(j);
-                Bubble.Point dPosition = inBubble.getDPosition();
-                inBubble.setDPosition(new Bubble.Point(dPosition.getX(), dPosition.getY()));
-                inBubble.setRotationAngle(rotationAngle);
-                inBubble.setDRadius(inBubble.getDRadius() * radiusRandom);
-                inBubble.setDAlpha(inBubble.getDAlpha() * alphaRandom);
-                inBubble.updateInitialState();
-
-                Bubble outBubble = new Bubble(inBubble);
-                outBubble.setDRotationAngle(inBubble.getDRotationAngle() * -1);
-                outBubble.setRotationAngle(rotationAngle);
-                outBubble.setDRadius(outBubble.getDRadius() * radiusRandom);
-                outBubble.setDAlpha(outBubble.getDAlpha() * alphaRandom);
-                outBubble.updateInitialState();
-                firework.add(outBubble);
+            color = getRandomBubbleColor();
+            for(int k = 360 / 30; k >= 0; k--) {
+                firework.add(builder
+                        .dPosition(Utils.rotateX(.3f, 0, 0, 0, k * 30), Utils.rotateY(.3f, 0, 0, 0, k * 30))
+                        .radius(mFireworkBubbleRadius * .2f)
+                        .dRadius(-.1f)
+                        .dAlpha(-.8f)
+                        .color(color)
+                        .build());
             }
         }
     }
@@ -437,8 +419,11 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
             return;
         }
 
-        for(int count = MAX_VISIBLE_FIREWORKS_COUNT - mVisibleFireworksList.size(); count > 0; count--) {
+        if(mVisibleFireworksList.isEmpty()) {
             List<Bubble> newFirework = getFireworksQueue(canvas).poll();
+            for (Bubble b : newFirework) {
+                b.reset();
+            }
             mVisibleFireworksList.add(newFirework);
         }
 
@@ -452,13 +437,9 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 mPaint.setColor(b.getColor());
                 mPaint.setAlpha(b.incrementAlphaAndGet());
                 float radius = b.incrementRadiusAndGet();
-                canvas.drawCircle(
-                        b.incrementXAndGet(),
-                        b.incrementYAndGet(),
-                        radius,
-                        mPaint);
+                canvas.drawCircle(b.incrementXAndGet(), b.incrementYAndGet(), radius, mPaint);
                 isFireworkFinished &= b.isInvisible();
-                isNeedToShowNextFirework &= b.getPercent() > 0.75f;
+                isNeedToShowNextFirework &= b.getPercent() > 0.45f;
             }
 
             if (isFireworkFinished) {
@@ -466,6 +447,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 i--;
                 continue;
             }
+
             if (isNeedToShowNextFirework && mVisibleFireworksList.size() < MAX_VISIBLE_FIREWORKS_COUNT) {
                 List<Bubble> newFirework = getFireworksQueue(canvas).poll();
                 for (Bubble b : newFirework) {
