@@ -2,6 +2,7 @@ package com.cleveroad.ptr;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -84,10 +85,10 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     /**
      * Curve
      */
-    private static final float CURVE_MAX_DEVIATION_PERCENT = 0.3f;
-    private static final float CURVE_DY_STEP_TWO = 10;
+    private static final float CURVE_TARGET_POINT_VALUE_NOT_ANIMATED = Float.MAX_VALUE;
     private static final float CURVE_VERTICAL_POINT_PERCENT = 0.7f;
-    private float mCurveDyStepTwo;
+    private float mCurveTargetPointAnimValue = CURVE_TARGET_POINT_VALUE_NOT_ANIMATED;
+    private final ValueAnimator mCurveAnimator = new ValueAnimator();
     /**
      * Constructor
      */
@@ -183,23 +184,14 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     }
 
     private float getCurveTargetPointY() {
-        float mCurveDyStepOne = (
-                Math.max(mParent.getTotalDragDistance(), mScreenWidth)
-                        + mConfig.getRocketDrawable().getIntrinsicHeight()
-        ) * mRocketAnimationPercent;
-
-        float currentTargetPoint = BezierCurveHelper.getQuadTargetPoint(
+        return BezierCurveHelper.getQuadTargetPoint(
                 getCurveYStart(),
                 getCurveYEnd(),
-                mParent.getTotalDragDistance(),
-                0.5f) - mCurveDyStepOne;
-        float maxTargetPoint = getCurveYEnd() * CURVE_MAX_DEVIATION_PERCENT;
-
-        if(currentTargetPoint > maxTargetPoint) {
-            return currentTargetPoint;
-        } else {
-            return Math.min(maxTargetPoint + (mCurveDyStepTwo += CURVE_DY_STEP_TWO), getCurveYStart());
-        }
+                mCurveTargetPointAnimValue != CURVE_TARGET_POINT_VALUE_NOT_ANIMATED ?
+                        getCurveYStart() + mCurveTargetPointAnimValue
+                        :
+                        mParent.getTotalDragDistance(),
+                0.5f);
     }
 
     /**
@@ -509,6 +501,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     public void start() {
         resetOrigins();
         mIsAnimationStarted = true;
+        mCurveAnimator.start();
         mRocketAnimator.start();
     }
 
@@ -517,6 +510,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         mIsAnimationStarted = false;
         mSkipRocketAnimation = false;
         mRocketAnimator.cancel();
+        mCurveAnimator.cancel();
         resetOrigins();
     }
 
@@ -547,14 +541,13 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         mFlameAnimator.start();
 
         //rocket animation
-        final float minValue = 0f, maxValue = 1f;
         mRocketAnimator.cancel();
         mRocketAnimator.setDuration(mConfig.getRocketAnimDuration());
-        mRocketAnimator.setFloatValues(minValue, maxValue);
+        mRocketAnimator.setFloatValues(0f, 1f);
         mRocketAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mRocketAnimationPercent = !mSkipRocketAnimation ? (float) valueAnimator.getAnimatedValue() : maxValue;
+                mRocketAnimationPercent = !mSkipRocketAnimation ? (float) valueAnimator.getAnimatedValue() : 1f;
                 if (mSkipRocketAnimation) {
                     valueAnimator.cancel();
                 }
@@ -566,6 +559,29 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 mIsRocketAnimationFinished = true;
             }
         });
+
+        //curve animation
+        mCurveAnimator.cancel();
+        mCurveAnimator.setDuration(mConfig.getRocketAnimDuration() * 2);
+
+        mCurveAnimator.setValues(
+                PropertyValuesHolder.ofFloat("force", 1f, 0f),
+                PropertyValuesHolder.ofFloat("value", (float) Math.PI, (float) (3f / 2f * Math.PI * 3f)));
+        mCurveAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                if(mPercent == 0f) return;
+                float force = (float) valueAnimator.getAnimatedValue("force");
+                float value = (float) valueAnimator.getAnimatedValue("value");
+
+                float maxDy = mParent.getTotalDragDistance() * (2f - CURVE_VERTICAL_POINT_PERCENT - Math.min(mPercent, 1.0f));
+                mCurveTargetPointAnimValue = !mSkipRocketAnimation ? -(float) (maxDy * Math.cos(value) * force) : 0f;
+                if (mSkipRocketAnimation) {
+                    valueAnimator.cancel();
+                }
+            }
+        });
+
     }
 
     Configuration getConfig() {
@@ -582,9 +598,9 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         mVisibleFireworksList.clear();
         mRocketSmokeBubbles.clear();
 
-        mCurveDyStepTwo = 0f;
         mIgnoredRocketXOffset = 0;
         mRocketAnimationPercent = 0;
+        mCurveTargetPointAnimValue = CURVE_TARGET_POINT_VALUE_NOT_ANIMATED;
 
         mIsRocketAnimationFinished = false;
     }
