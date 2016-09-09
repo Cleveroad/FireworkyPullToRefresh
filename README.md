@@ -55,33 +55,25 @@ Just wrap your view:
         xmlns:app="http://schemas.android.com/apk/res-auto"
         ...
         app:ptr_fireworkColors="@array/fireworkColors"
-        app:ptr_flame="@drawable/flame"
         app:ptr_background="@drawable/background"
-        app:ptr_rocket="@drawable/rocket"
         app:ptr_rocketAnimDuration="1000">
 ```
 |  attribute name | description |
 |---|---|
 | ptr_fireworkColors  | An array of colors which will be used for firework animation |
-| ptr_flame  | An Drawable of rocket flame |
 | ptr_background  | Background drawable |
-| ptr_rocket  | Rocket drawable |
+| ptr_backgroundColor | Background color |
 | ptr_rocketAnimDuration  | Rocket flight duration |
 ### Via Java code ###
 
 ```Java
 //use .config() methods:
-mPullToRefresh.getConfig().setRocket(fireworkRocketDrawable);
-mPullToRefresh.getConfig().setRocket(fireworkRocketBitmap);
-mPullToRefresh.getConfig().setRocket(R.drawable.fireworkRocket);
 
 mPullToRefresh.getConfig().setBackground(backgroundDrawable);
 mPullToRefresh.getConfig().setBackground(backgroundBitmap);
 mPullToRefresh.getConfig().setBackground(R.drawable.background);
-
-mPullToRefresh.getConfig().setFlame(flameDrawable);
-mPullToRefresh.getConfig().setFlame(flameBitmap);
-mPullToRefresh.getConfig().setFlame(R.drawable.flame);
+mPullToRefresh.getConfig().setBackgroundColor(Color.BLACK);
+mPullToRefresh.getConfig().setBackgroundColorFromResources(R.color.background);
 
 mPullToRefresh.getConfig().setFireworkColors(colorsIntArray);
 mPullToRefresh.getConfig().setFireworkColors(R.array.fireworkColors);
