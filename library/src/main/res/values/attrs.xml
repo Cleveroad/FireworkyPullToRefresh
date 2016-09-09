@@ -3,8 +3,7 @@
     <declare-styleable name="FireworkyPullToRefreshLayout" tools:ignore="ResourceName">
         <attr name="ptr_fireworkColors" format="reference"/>
         <attr name="ptr_background" format="reference"/>
-        <attr name="ptr_flame" format="reference"/>
-        <attr name="ptr_rocket" format="reference"/>
+        <attr name="ptr_backgroundColor" format="color" />
         <attr name="ptr_rocketAnimDuration" format="integer"/>
     </declare-styleable>
 </resources>

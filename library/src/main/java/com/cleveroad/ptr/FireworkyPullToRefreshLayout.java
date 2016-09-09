@@ -160,9 +160,15 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.FireworkyPullToRefreshLayout);
         try {
-            getConfig().setBackground(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_background, R.drawable.ptr_background));
-            getConfig().setFlame(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_flame, R.drawable.ptr_ic_flame));
-            getConfig().setRocket(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_rocket, R.drawable.ptr_ic_firework));
+            int backgroundId = array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_background, -1);
+            int backgroundColor = array.getColor(R.styleable.FireworkyPullToRefreshLayout_ptr_backgroundColor, Integer.MAX_VALUE);
+            if(backgroundId != -1) {
+                getConfig().setBackground(backgroundId);
+            } else {
+                if(backgroundColor != Integer.MAX_VALUE) {
+                    getConfig().setBackgroundColor(backgroundColor);
+                }
+            }
             getConfig().setFireworkColors(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_fireworkColors, R.array.ptr_defColorSet));
             getConfig().setRocketAnimDuration(array.getInteger(R.styleable.FireworkyPullToRefreshLayout_ptr_rocketAnimDuration, 500));
         } finally {
