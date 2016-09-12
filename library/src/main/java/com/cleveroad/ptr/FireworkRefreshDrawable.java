@@ -17,7 +17,6 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 
 
@@ -78,7 +77,6 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
      */
     private static final int MAX_FIREWORKS_COUNT = 50;
     private static final int MAX_VISIBLE_FIREWORKS_COUNT = 2;
-    private final Queue<List<Bubble>> mFireworksQueue = new LinkedList<>();
     private final List<List<Bubble>> mVisibleFireworksList = new LinkedList<>();
     private int mFireworkBubbleRadius;
 
@@ -348,62 +346,60 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
      * Fireworks
      * *********************************************************************************************
      */
-    private void initFireworkList(final Canvas canvas) {
-        mFireworksQueue.clear();
+    private List<Bubble> getFirework(final Canvas canvas) {
 
         float width = canvas.getWidth();
         float height = getCurveYStart();
 
         float fireworkWidth = width / MAX_FIREWORKS_COUNT;
 
-        for(int i = 0; i < MAX_FIREWORKS_COUNT; i++) {
-            List<Bubble> firework = new ArrayList<>(50);
-            mFireworksQueue.add(firework);
+        List<Bubble> firework = new ArrayList<>(50);
 
-            float x = RND.nextInt((int) (width - fireworkWidth / 2.)) + fireworkWidth / 2;
-            float y = RND.nextInt((int) (height * 0.6f  - fireworkWidth)) + fireworkWidth / 2f;
+        float x = RND.nextInt((int) (width - fireworkWidth / 2.)) + fireworkWidth / 2;
+        float y = RND.nextInt((int) (height * 0.6f - fireworkWidth)) + fireworkWidth / 2f;
 
-            Bubble.Builder builder = Bubble.newBuilder()
-                    .position(new Bubble.Point(x, y))
-                    .dRotationAngle(0.01d);
+        Bubble.Builder builder = Bubble.newBuilder()
+                .position(new Bubble.Point(x, y))
+                .dRotationAngle(0.01d);
 
-            int color = getRandomBubbleColor();
-            builder.dPosition(0.f, 0.f).color(color)
-                    .radius(mFireworkBubbleRadius * .2f).dRadius(.1f).alpha(255).dAlpha(-1.7f).build(); //center
+        int color = getRandomBubbleColor();
+        builder.dPosition(0.f, 0.f).color(color)
+                .radius(mFireworkBubbleRadius * .2f).dRadius(.1f).alpha(255).dAlpha(-1.7f).build(); //center
 
-            color = getRandomBubbleColor();
-            for(int k = 360 / 45; k >= 0; k--) {
-                firework.add(builder
-                        .dPosition(Utils.rotateX(.7f, 0, 0, 0, k * 45), Utils.rotateY(.7f, 0, 0, 0, k * 45))
-                        .radius(mFireworkBubbleRadius * .4f)
-                        .dRadius(-.15f)
-                        .dAlpha(-.8f)
-                        .color(color)
-                        .build());
-            }
-
-            color = getRandomBubbleColor();
-            for(int k = 360 / 30; k >= 0; k--) {
-                firework.add(builder
-                        .dPosition(Utils.rotateX(.5f, 0, 0, 0, k * 30), Utils.rotateY(.5f, 0, 0, 0, k * 30))
-                        .radius(mFireworkBubbleRadius * .2f)
-                        .dRadius(-.1f)
-                        .dAlpha(-.8f)
-                        .color(color)
-                        .build());
-            }
-
-            color = getRandomBubbleColor();
-            for(int k = 360 / 30; k >= 0; k--) {
-                firework.add(builder
-                        .dPosition(Utils.rotateX(.3f, 0, 0, 0, k * 30), Utils.rotateY(.3f, 0, 0, 0, k * 30))
-                        .radius(mFireworkBubbleRadius * .2f)
-                        .dRadius(-.1f)
-                        .dAlpha(-.8f)
-                        .color(color)
-                        .build());
-            }
+        color = getRandomBubbleColor();
+        for (int k = 360 / 45; k >= 0; k--) {
+            firework.add(builder
+                    .dPosition(Utils.rotateX(.7f, 0, 0, 0, k * 45), Utils.rotateY(.7f, 0, 0, 0, k * 45))
+                    .radius(mFireworkBubbleRadius * .4f)
+                    .dRadius(-.15f)
+                    .dAlpha(-.8f)
+                    .color(color)
+                    .build());
         }
+
+        color = getRandomBubbleColor();
+        for (int k = 360 / 30; k >= 0; k--) {
+            firework.add(builder
+                    .dPosition(Utils.rotateX(.5f, 0, 0, 0, k * 30), Utils.rotateY(.5f, 0, 0, 0, k * 30))
+                    .radius(mFireworkBubbleRadius * .2f)
+                    .dRadius(-.1f)
+                    .dAlpha(-.8f)
+                    .color(color)
+                    .build());
+        }
+
+        color = getRandomBubbleColor();
+        for (int k = 360 / 30; k >= 0; k--) {
+            firework.add(builder
+                    .dPosition(Utils.rotateX(.3f, 0, 0, 0, k * 30), Utils.rotateY(.3f, 0, 0, 0, k * 30))
+                    .radius(mFireworkBubbleRadius * .2f)
+                    .dRadius(-.1f)
+                    .dAlpha(-.8f)
+                    .color(color)
+                    .build());
+        }
+
+        return firework;
     }
 
     private void drawFireworks(final Canvas canvas) {
@@ -412,11 +408,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         }
 
         if(mVisibleFireworksList.isEmpty()) {
-            List<Bubble> newFirework = getFireworksQueue(canvas).poll();
-            for (Bubble b : newFirework) {
-                b.reset();
-            }
-            mVisibleFireworksList.add(newFirework);
+            mVisibleFireworksList.add(getFirework(canvas));
         }
 
         for (int i = 0; i < mVisibleFireworksList.size(); i++) {
@@ -441,20 +433,9 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
             }
 
             if (isNeedToShowNextFirework && mVisibleFireworksList.size() < MAX_VISIBLE_FIREWORKS_COUNT) {
-                List<Bubble> newFirework = getFireworksQueue(canvas).poll();
-                for (Bubble b : newFirework) {
-                    b.reset();
-                }
-                mVisibleFireworksList.add(newFirework);
+                mVisibleFireworksList.add(getFirework(canvas));
             }
         }
-    }
-
-    private Queue<List<Bubble>> getFireworksQueue(Canvas canvas) {
-        if (mFireworksQueue.isEmpty()) {
-            initFireworkList(canvas);
-        }
-        return mFireworksQueue;
     }
 
     private void drawRocketSmoke(Canvas canvas) {

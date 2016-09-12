@@ -353,10 +353,14 @@ class Bubble implements Serializable {
         Bubble build() {
             if (position == null) {
                 position = new Point(0, 0);
+            } else {
+                position = new Point(position);
             }
 
             if (dPosition == null) {
                 dPosition = new Point(0, 0);
+            } else {
+                dPosition = new Point(dPosition);
             }
             return new Bubble(this);
         }

@@ -31,7 +31,7 @@ public class Configuration {
         setFireworkColors(R.array.ptr_defColorSet);
         setRocket(R.drawable.ptr_ic_firework);
         setFlame(R.drawable.ptr_ic_flame);
-        setBackground(R.drawable.ptr_background3);
+        setBackground(R.drawable.ptr_background5);
         setRocketAnimDuration(500L);
     }
 
