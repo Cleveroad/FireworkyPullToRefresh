@@ -77,7 +77,7 @@ public class ListViewFragment extends Fragment implements FireworkyPullToRefresh
         }, REFRESH_DELAY);
     }
 
-    class SampleAdapter extends ArrayAdapter<Object> {
+    static class SampleAdapter extends ArrayAdapter<Object> {
         private final LayoutInflater mInflater;
 
         SampleAdapter(Context context, int layoutResourceId, List<Object> list) {
@@ -87,6 +87,7 @@ public class ListViewFragment extends Fragment implements FireworkyPullToRefresh
 
         @NonNull
         @Override
+        @SuppressWarnings("unused")
         public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
             final ViewHolder viewHolder;
             if (convertView == null) {
@@ -99,7 +100,7 @@ public class ListViewFragment extends Fragment implements FireworkyPullToRefresh
             return convertView;
         }
 
-        class ViewHolder {
+        static class ViewHolder {
             //put your views here
         }
     }

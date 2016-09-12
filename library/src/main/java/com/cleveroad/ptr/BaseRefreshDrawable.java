@@ -19,7 +19,7 @@ abstract class BaseRefreshDrawable extends Drawable implements Drawable.Callback
         this.mRefreshLayout = mRefreshLayout;
     }
 
-    protected Context getContext() {
+    Context getContext() {
         return mRefreshLayout == null ? null : mRefreshLayout.getContext();
     }
 

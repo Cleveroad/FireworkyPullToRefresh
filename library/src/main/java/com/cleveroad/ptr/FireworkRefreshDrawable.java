@@ -180,7 +180,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     }
 
     private float getCurveTargetPointX() {
-        return mParent.getWidth() / 2;
+        return mParent.getWidth() / 2f;
     }
 
     private float getCurveTargetPointY() {
@@ -281,7 +281,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
             float points[] = mapPoints(
                     canvas,
-                    offsetX + offsetXDelta + rocketDrawable.getIntrinsicWidth() / 2,
+                    offsetX + offsetXDelta + rocketDrawable.getIntrinsicWidth() / 2f,
                     offsetY + rocketDrawable.getIntrinsicHeight());
 
             if (lastSmokeBubble == null || points[1] < (lastSmokeBubble.getYPos() - mFireworkBubbleRadius)) {
@@ -303,8 +303,8 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
         //rocket flame
         canvas.translate(
-                -rocketDrawable.getIntrinsicWidth() * rocketScale / 2,
-                rocketDrawable.getIntrinsicHeight() * rocketScale - flameDrawable.getIntrinsicHeight() / 4);
+                -rocketDrawable.getIntrinsicWidth() * rocketScale / 2f,
+                rocketDrawable.getIntrinsicHeight() * rocketScale - flameDrawable.getIntrinsicHeight() / 4f);
         canvas.scale(mFlameScale, mFlameScale, flameDrawable.getIntrinsicWidth() / 2f, flameDrawable.getIntrinsicHeight() / 2f);
 
 
@@ -332,7 +332,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
             sign = -1;
         }
         double xLength = (mScreenWidth - 2. * xTouch) / 2.;
-        double yLength = yTouch - mRocketTopOffset + mConfig.getRocketDrawable().getIntrinsicHeight() / 2;
+        double yLength = yTouch - mRocketTopOffset + mConfig.getRocketDrawable().getIntrinsicHeight() / 2.;
         double tgAlpha = yLength / xLength;
         double result = Math.atan(tgAlpha) * (180. / Math.PI);
 

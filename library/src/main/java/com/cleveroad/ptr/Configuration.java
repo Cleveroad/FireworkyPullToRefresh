@@ -31,13 +31,13 @@ public class Configuration {
         setFireworkColors(R.array.ptr_defColorSet);
         setRocket(R.drawable.ptr_ic_firework);
         setFlame(R.drawable.ptr_ic_flame);
-        setBackground(R.drawable.ptr_background);
+        setBackground(R.drawable.ptr_background3);
         setRocketAnimDuration(500L);
     }
 
     /**
      * Use this method to set rocket drawable
-     * @param rocketDrawable
+     * @param rocketDrawable drawable of rocket
      */
     void setRocket(Drawable rocketDrawable) {
         mRocketDrawable = rocketDrawable;
@@ -45,7 +45,7 @@ public class Configuration {
 
     /**
      * Use this method to set rocket bitmap
-     * @param rocketBitmap
+     * @param rocketBitmap bitmap of rocket
      */
     void setRocket(Bitmap rocketBitmap) {
         setRocket(new BitmapDrawable(mContext.getResources(), rocketBitmap));
@@ -53,7 +53,7 @@ public class Configuration {
 
     /**
      * Use this method to set rocket drawable from resources
-     * @param fireworkDrawableRes
+     * @param fireworkDrawableRes drawable resource id of rocket
      */
     void setRocket(@DrawableRes int fireworkDrawableRes) {
         mRocketDrawable = ContextCompat.getDrawable(mContext, fireworkDrawableRes);
@@ -65,7 +65,7 @@ public class Configuration {
 
     /**
      * Use this method to set flame drawable
-     * @param flameDrawable
+     * @param flameDrawable drawable of rocket flame
      */
     void setFlame(Drawable flameDrawable) {
         mFlameDrawable = flameDrawable;
@@ -73,7 +73,7 @@ public class Configuration {
 
     /**
      * Use this method to set flame bitmap
-     * @param flameBitmap
+     * @param flameBitmap bitmap of rocket flame
      */
     void setFlame(Bitmap flameBitmap) {
         setFlame(new BitmapDrawable(mContext.getResources(), flameBitmap));
@@ -81,7 +81,7 @@ public class Configuration {
 
     /**
      * Use this method to set flame drawable from resources
-     * @param flameDrawableRes
+     * @param flameDrawableRes drawable resource id of rocket flame
      */
     void setFlame(@DrawableRes int flameDrawableRes) {
         mFlameDrawable = ContextCompat.getDrawable(mContext, flameDrawableRes);
@@ -93,7 +93,7 @@ public class Configuration {
 
     /**
      * Use this method to set background drawable
-     * @param backgroundDrawable
+     * @param backgroundDrawable drawable of background
      */
     public void setBackground(Drawable backgroundDrawable) {
         mBackgroundDrawable = backgroundDrawable;
@@ -101,7 +101,7 @@ public class Configuration {
 
     /**
      * Use this method to set background bitmap
-     * @param backgroundBitmap
+     * @param backgroundBitmap bitmap of background
      */
     public void setBackground(Bitmap backgroundBitmap) {
         setBackground(new BitmapDrawable(mContext.getResources(), backgroundBitmap));
@@ -109,7 +109,7 @@ public class Configuration {
 
     /**
      * Use this method to set background drawable from resources
-     * @param backgroundDrawableRes
+     * @param backgroundDrawableRes drawable resource id of background
      */
     public void setBackground(@DrawableRes int backgroundDrawableRes) {
         mBackgroundDrawable = ContextCompat.getDrawable(mContext, backgroundDrawableRes);
@@ -117,7 +117,7 @@ public class Configuration {
 
     /**
      * Use this method to set color as background
-     * @param backgroundColor
+     * @param backgroundColor color of background
      */
     public void setBackgroundColor(@ColorInt int backgroundColor) {
         setBackground(new ColorDrawable(backgroundColor));
@@ -125,7 +125,7 @@ public class Configuration {
 
     /**
      * Use this method to set color from resources as background
-     * @param backgroundColorRes
+     * @param backgroundColorRes color resource if of background
      */
     public void setBackgroundColorFromResources(@ColorRes int backgroundColorRes) {
         setBackgroundColor(ContextCompat.getColor(mContext, backgroundColorRes));
@@ -144,7 +144,7 @@ public class Configuration {
 
     /**
      * Use this method to set firework colors
-     * @param fireworkColors
+     * @param fireworkColors colors of fireworks
      */
     public void setFireworkColors(int fireworkColors[]) {
         mFireworkColors = fireworkColors;
@@ -152,7 +152,7 @@ public class Configuration {
 
     /**
      * Use this method to set firework color set from resources
-     * @param fireworkColorsResources
+     * @param fireworkColorsResources color array resource id of fireworks
      */
     public void setFireworkColors(@ArrayRes int fireworkColorsResources) {
         mFireworkColors = mContext.getResources().getIntArray(fireworkColorsResources);
@@ -164,7 +164,7 @@ public class Configuration {
 
     /**
      * Use this method to set rocket animation duration
-     * @param rocketAnimDuration
+     * @param rocketAnimDuration rocket animation duration in milliseconds
      */
     public void setRocketAnimDuration(long rocketAnimDuration) {
         mRocketAnimDuration = rocketAnimDuration;
