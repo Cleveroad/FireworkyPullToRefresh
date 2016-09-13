@@ -2,6 +2,7 @@ package com.cleveroad.pulltorefresh.firework;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -30,7 +31,7 @@ public class Configuration {
         setFireworkColors(R.array.ptr_defColorSet);
         setRocket(R.drawable.ptr_ic_firework);
         setFlame(R.drawable.ptr_ic_flame);
-        setBackground(R.drawable.ptr_background5);
+        setBackgroundColor(Color.BLACK);
         setRocketAnimDuration(500L);
     }
 
