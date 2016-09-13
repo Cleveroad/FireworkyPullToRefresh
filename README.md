@@ -19,7 +19,7 @@ by Gradle:
 ```groovy
     //coming soon
 ```
-or just download zip and import module "fireworky-pull-to-refresh to be able to modify the sources.
+or just download zip and import module "fireworky-pull-to-refresh" to be able to modify the sources.
 ### Supported Views ###
 
 * RecyclerView
@@ -113,7 +113,7 @@ mPullToRefresh.setOnChildScrollUpCallback(new FireworkyPullToRefreshLayout.OnChi
 ```
 ## Support
 If you have any questions regarding the use of this tutorial, please contact us for support
-at info@cleveroad.com (email subject: «Sliding android app tutorial. Support request.»)
+at info@cleveroad.com (email subject: «FireworkyPullToRefresh for Android. Support request.»)
 <br>or
 <br>Use our contacts:
 <br><a href="https://www.cleveroad.com/?utm_source=github&utm_medium=link&utm_campaign=contacts">Cleveroad.com</a>
