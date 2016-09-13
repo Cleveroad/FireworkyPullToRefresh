@@ -1,4 +1,4 @@
-package com.cleveroad.ptr;
+package com.cleveroad.pulltorefresh.firework;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,7 +11,6 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 
-import com.cleveroad.library.R;
 
 /**
  * Class {@link Configuration} contains {@link FireworkyPullToRefreshLayout} instance configuration

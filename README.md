@@ -32,7 +32,7 @@ Just wrap your view:
 
 ```XML
 
-<com.cleveroad.ptr.FireworkyPullToRefreshLayout
+<com.cleveroad.pulltorefresh.firework.FireworkyPullToRefreshLayout
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -50,7 +50,7 @@ Just wrap your view:
 
 ```XML
 
-<com.cleveroad.ptr.FireworkyPullToRefreshLayout
+<com.cleveroad.pulltorefresh.firework.FireworkyPullToRefreshLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         ...
         app:ptr_fireworkColors="@array/fireworkColors"

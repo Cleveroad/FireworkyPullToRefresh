@@ -1,4 +1,4 @@
-package com.cleveroad.ptr;
+package com.cleveroad.pulltorefresh.firework;
 
 import android.annotation.TargetApi;
 import android.content.Context;

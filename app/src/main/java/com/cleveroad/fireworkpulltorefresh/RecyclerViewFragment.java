@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cleveroad.ptr.FireworkyPullToRefreshLayout;
+import com.cleveroad.pulltorefresh.firework.FireworkyPullToRefreshLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

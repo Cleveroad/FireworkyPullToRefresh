@@ -1,4 +1,4 @@
-package com.cleveroad.ptr;
+package com.cleveroad.pulltorefresh.firework;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -21,7 +21,6 @@ import android.view.animation.Transformation;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 
-import com.cleveroad.library.R;
 
 /**
  * The {@link FireworkyPullToRefreshLayout} should be used whenever the user can refresh the

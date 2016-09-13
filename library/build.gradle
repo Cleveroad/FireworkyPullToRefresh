@@ -28,3 +28,4 @@ dependencies {
     //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:24.2.0'
 }
+apply from: './gradle-mvn-push.gradle'
