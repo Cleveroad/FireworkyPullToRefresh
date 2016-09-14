@@ -6,7 +6,7 @@
 It’s time to add some creativity to good old pull to refresh view. You can now literally launch your feed content or search results like a firework! Entertain your app users while they are waiting for refreshment — it’s easy with Fireworky Pull To Refresh library for Android apps.
 
 ![Demo image](/images/demo_.gif)
-#####Check out the animation on the <strong><a target="_blank" href="https://www.youtube.com/watch?v=lJSGIk4Zh9s&feature=youtu.be">Sliding Tutorial for Android on YouTube</a></strong> in HD quality.
+#####Check out the animation on the <strong><a target="_blank" href="https://youtu.be/sJhBKyvF7i4?list=PLi-FH7__aeiydOwY_1q5I8P2EUSseqUCj">Fireworky Pull To Refresh for Android on YouTube</a></strong> in HD quality.
 
 What will you receive by using the Fireworky Pull To Refresh component in your app? The answer is pretty obvious: original and inspiring design element to generate well-disposed users. So, here you go!
  
