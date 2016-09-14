@@ -75,7 +75,7 @@ class Bubble implements Serializable {
     }
 
     float getXPos() {
-        if (mRotationAngle != Double.MIN_VALUE) {
+        if (mDRotationAngle != Double.MIN_VALUE) {
             float deltaX = mPosition.x - mInitialState.mPosition.x;
             float deltaY = mPosition.y - mInitialState.mPosition.y;
             double x = deltaX * Math.cos(mRotationAngle) - deltaY * Math.sin(mRotationAngle);
@@ -88,7 +88,7 @@ class Bubble implements Serializable {
     }
 
     float getYPos() {
-        if (mRotationAngle != Double.MIN_VALUE) {
+        if (mDRotationAngle != Double.MIN_VALUE) {
             float deltaX = mPosition.x - mInitialState.mPosition.x;
             float deltaY = mPosition.y - mInitialState.mPosition.y;
             double y = deltaY * Math.cos(mRotationAngle) + deltaX * Math.sin(mRotationAngle);
