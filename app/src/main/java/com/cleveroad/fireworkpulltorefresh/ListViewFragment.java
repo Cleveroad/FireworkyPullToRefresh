@@ -4,18 +4,31 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.cleveroad.ptr.FireworkyPullToRefreshLayout;
+import com.cleveroad.pulltorefresh.firework.FireworkyPullToRefreshLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListViewFragment extends BaseFragment implements FireworkyPullToRefreshLayout.OnRefreshListener {
+public class ListViewFragment extends Fragment implements FireworkyPullToRefreshLayout.OnRefreshListener {
+    public static final int REFRESH_DELAY = 4500;
+    private static final int ITEMS_COUNT = 25;
+    private static final List<Object> mDummyList;
+    static {
+        mDummyList = new ArrayList<>(ITEMS_COUNT);
+        for (int i = 0; i < ITEMS_COUNT; i++) {
+            mDummyList.add(new Object());
+        }
+    }
 
     @BindView(R.id.listView)
     ListView mListView;
@@ -41,9 +54,9 @@ public class ListViewFragment extends BaseFragment implements FireworkyPullToRef
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPullRefreshView.getConfig().setFireworkColorsFromResources(R.array.fireworkColors);
         mPullRefreshView.setOnRefreshListener(this);
-        mListView.setAdapter(new SampleAdapter(getActivity(), R.layout.list_item));
+
+        mListView.setAdapter(new SampleAdapter(getActivity(), R.layout.list_item, mDummyList));
 
         mPullRefreshView.post(new Runnable() {
             @Override
@@ -64,16 +77,17 @@ public class ListViewFragment extends BaseFragment implements FireworkyPullToRef
         }, REFRESH_DELAY);
     }
 
-    class SampleAdapter extends ArrayAdapter<Integer> {
+    static class SampleAdapter extends ArrayAdapter<Object> {
         private final LayoutInflater mInflater;
 
-        SampleAdapter(Context context, int layoutResourceId) {
-            super(context, layoutResourceId, colors);
+        SampleAdapter(Context context, int layoutResourceId, List<Object> list) {
+            super(context, layoutResourceId, list);
             mInflater = LayoutInflater.from(context);
         }
 
         @NonNull
         @Override
+        @SuppressWarnings("unused")
         public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
             final ViewHolder viewHolder;
             if (convertView == null) {
@@ -83,13 +97,10 @@ public class ListViewFragment extends BaseFragment implements FireworkyPullToRef
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
-            convertView.setBackgroundColor(colors.get(position));
-
             return convertView;
         }
 
-        class ViewHolder {
+        static class ViewHolder {
             //put your views here
         }
     }

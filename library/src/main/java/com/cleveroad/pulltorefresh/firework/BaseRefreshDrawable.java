@@ -1,4 +1,4 @@
-package com.cleveroad.ptr;
+package com.cleveroad.pulltorefresh.firework;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -15,11 +15,11 @@ abstract class BaseRefreshDrawable extends Drawable implements Drawable.Callback
 
     private FireworkyPullToRefreshLayout mRefreshLayout;
 
-    BaseRefreshDrawable(Context context, FireworkyPullToRefreshLayout mRefreshLayout) {
+    BaseRefreshDrawable(FireworkyPullToRefreshLayout mRefreshLayout) {
         this.mRefreshLayout = mRefreshLayout;
     }
 
-    protected Context getContext() {
+    Context getContext() {
         return mRefreshLayout == null ? null : mRefreshLayout.getContext();
     }
 

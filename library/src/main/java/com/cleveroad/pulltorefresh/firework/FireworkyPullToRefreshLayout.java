@@ -1,4 +1,4 @@
-package com.cleveroad.ptr;
+package com.cleveroad.pulltorefresh.firework;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -21,7 +21,6 @@ import android.view.animation.Transformation;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 
-import com.cleveroad.library.R;
 
 /**
  * The {@link FireworkyPullToRefreshLayout} should be used whenever the user can refresh the
@@ -143,7 +142,7 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
 
         mRefreshView = new ImageView(context);
         mTotalDragDistance = Utils.convertDpToPixel(context, ROCKET_DRAG_MAX_DISTANCE);
-        mRefreshView.setImageDrawable(mRefreshDrawable = new FireworkRefreshDrawable(context, this));
+        mRefreshView.setImageDrawable(mRefreshDrawable = new FireworkRefreshDrawable(this));
         mConfig =  mRefreshDrawable.getConfig();
 
         readAttributes(context, attrs);
@@ -160,11 +159,17 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
 
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.FireworkyPullToRefreshLayout);
         try {
-            getConfig().setBackgroundFromResources(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_background, R.drawable.ptr_background));
-            getConfig().setFlameFromResources(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_flame, R.drawable.ptr_ic_flame));
-            getConfig().setRocketFromResources(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_rocket, R.drawable.ptr_ic_firework));
-            getConfig().setFireworkColorsFromResources(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_fireworkColors, R.array.ptr_defColorSet));
-            getConfig().setRocketAnimDuration(array.getInteger(R.styleable.FireworkyPullToRefreshLayout_ptr_rocketAnimDuration, 1000));
+            int backgroundId = array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_background, -1);
+            int backgroundColor = array.getColor(R.styleable.FireworkyPullToRefreshLayout_ptr_backgroundColor, Integer.MAX_VALUE);
+            if(backgroundId != -1) {
+                getConfig().setBackground(backgroundId);
+            } else {
+                if(backgroundColor != Integer.MAX_VALUE) {
+                    getConfig().setBackgroundColor(backgroundColor);
+                }
+            }
+            getConfig().setFireworkColors(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_fireworkColors, R.array.ptr_defColorSet));
+            getConfig().setRocketAnimDuration(array.getInteger(R.styleable.FireworkyPullToRefreshLayout_ptr_rocketAnimDuration, 500));
         } finally {
             array.recycle();
         }
@@ -521,6 +526,6 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
          *
          * @return Whether it is possible for the child view of parent layout to scroll up.
          */
-        boolean canChildScrollUp(FireworkyPullToRefreshLayout parent, @Nullable View child);
+        boolean canChildScrollUp(@NonNull FireworkyPullToRefreshLayout parent, @Nullable View child);
     }
 }

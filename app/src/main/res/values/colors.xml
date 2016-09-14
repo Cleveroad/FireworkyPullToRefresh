@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#cde3e1</color>
-    <color name="colorPrimaryDark">#ca905d</color>
-    <color name="colorAccent">#e1e0e0</color>
-
-    <color name="firework1">#77c672</color>
-    <color name="firework2">#c9d962</color>
-    <color name="firework3">#cf9665</color>
-    <color name="firework4">#cf7865</color>
-    <color name="firework5">#cf6571</color>
-    <color name="firework6">#93de6b</color>
-    <color name="firework7">#dec65c</color>
-    <color name="firework8">#de5c5e</color>
-
-    <integer-array name="fireworkColors">
-        <item>@color/firework1</item>
-        <item>@color/firework2</item>
-        <item>@color/firework3</item>
-        <item>@color/firework4</item>
-        <item>@color/firework5</item>
-        <item>@color/firework6</item>
-        <item>@color/firework7</item>
-        <item>@color/firework8</item>
-    </integer-array>
+    <color name="colorPrimary">#78afc3</color>
+    <color name="colorPrimaryDark">#4592b5</color>
+    <color name="colorAccent">#ebebeb</color>
 </resources>

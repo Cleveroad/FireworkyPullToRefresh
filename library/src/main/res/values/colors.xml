@@ -16,10 +16,8 @@
     <color name="ptr_bubble14">#2e609c</color>
     <color name="ptr_bubble15">#77c672</color>
     <color name="ptr_bubble16">#c9d962</color>
-    <color name="ptr_bubble17">#cf9665</color>
-    <color name="ptr_bubble18">#cf7865</color>
-    <color name="ptr_bubble19">#cf6571</color>
-    <color name="ptr_bubble20">#93de6b</color>
+    <color name="ptr_bubble17">#cf6571</color>
+    <color name="ptr_bubble18">#93de6b</color>
 
     <integer-array name="ptr_defColorSet">
         <item>@color/ptr_bubble1</item>
@@ -40,7 +38,5 @@
         <item>@color/ptr_bubble16</item>
         <item>@color/ptr_bubble17</item>
         <item>@color/ptr_bubble18</item>
-        <item>@color/ptr_bubble19</item>
-        <item>@color/ptr_bubble20</item>
     </integer-array>
 </resources>

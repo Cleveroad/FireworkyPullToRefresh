@@ -2,18 +2,22 @@ package com.cleveroad.fireworkpulltorefresh;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cleveroad.ptr.FireworkyPullToRefreshLayout;
+import com.cleveroad.pulltorefresh.firework.FireworkyPullToRefreshLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecyclerViewFragment extends BaseFragment {
+public class RecyclerViewFragment extends Fragment {
+    private static final int REFRESH_DELAY = 4500;
+    private static final int ITEMS_COUNT = 25;
+
     @BindView(R.id.pullToRefresh)
     FireworkyPullToRefreshLayout mPullToRefresh;
     @BindView(R.id.recyclerView)
@@ -56,8 +60,6 @@ public class RecyclerViewFragment extends BaseFragment {
     }
 
     private void initRefreshView() {
-        mPullToRefresh.getConfig().setFireworkColorsFromResources(R.array.fireworkColors);
-
         mPullToRefresh.setOnRefreshListener(new FireworkyPullToRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -81,23 +83,17 @@ public class RecyclerViewFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(RecyclerViewFragment.SampleHolder holder, int position) {
-            holder.bindData(colors.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return colors.size();
+            return ITEMS_COUNT;
         }
     }
 
     static class SampleHolder extends RecyclerView.ViewHolder {
-
         SampleHolder(View itemView) {
             super(itemView);
-        }
-
-        void bindData(int color) {
-            itemView.setBackgroundColor(color);
         }
     }
 }

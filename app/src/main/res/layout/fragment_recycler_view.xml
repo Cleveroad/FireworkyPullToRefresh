@@ -2,15 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/firework1"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
 
-    <com.cleveroad.ptr.FireworkyPullToRefreshLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.cleveroad.pulltorefresh.firework.FireworkyPullToRefreshLayout
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:ptr_fireworkColors="@array/fireworkColors">
+        app:ptr_background="@drawable/background">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -18,8 +17,8 @@
             android:layout_height="match_parent"
             android:divider="@null"
             android:dividerHeight="0dp"
-            android:fadingEdge="none"/>
+            android:fadingEdge="none" />
 
-    </com.cleveroad.ptr.FireworkyPullToRefreshLayout>
+    </com.cleveroad.pulltorefresh.firework.FireworkyPullToRefreshLayout>
 
 </LinearLayout>

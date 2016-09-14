@@ -1,4 +1,4 @@
-package com.cleveroad.ptr;
+package com.cleveroad.pulltorefresh.firework;
 
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
@@ -50,32 +50,32 @@ class Bubble implements Serializable {
         dest.mRotationMulCoefficient = src.mRotationMulCoefficient;
     }
 
-    public static Builder newBuilder() {
+    static Builder newBuilder() {
         return new Builder();
     }
 
 
     //--------------------------------------- bubble mPosition --------------------------------------
-    public Point getPosition() {
+    Point getPosition() {
         return mPosition;
     }
 
-    public void setPosition(Point position) {
+    void setPosition(Point position) {
         this.mPosition = position;
     }
 
-    public float incrementXAndGet() {
+    float incrementXAndGet() {
         mPosition.x += mDPosition.x;
         return getXPos();
     }
 
-    public float incrementYAndGet() {
+    float incrementYAndGet() {
         mPosition.y += mDPosition.y;
         return getYPos();
     }
 
-    public float getXPos() {
-        if (mRotationAngle != Double.MIN_VALUE) {
+    float getXPos() {
+        if (mDRotationAngle != Double.MIN_VALUE) {
             float deltaX = mPosition.x - mInitialState.mPosition.x;
             float deltaY = mPosition.y - mInitialState.mPosition.y;
             double x = deltaX * Math.cos(mRotationAngle) - deltaY * Math.sin(mRotationAngle);
@@ -83,12 +83,12 @@ class Bubble implements Serializable {
         } else return mPosition.x;
     }
 
-    public void setXPos(float xPos) {
+    void setXPos(float xPos) {
         this.mPosition.x = xPos;
     }
 
-    public float getYPos() {
-        if (mRotationAngle != Double.MIN_VALUE) {
+    float getYPos() {
+        if (mDRotationAngle != Double.MIN_VALUE) {
             float deltaX = mPosition.x - mInitialState.mPosition.x;
             float deltaY = mPosition.y - mInitialState.mPosition.y;
             double y = deltaY * Math.cos(mRotationAngle) + deltaX * Math.sin(mRotationAngle);
@@ -96,128 +96,128 @@ class Bubble implements Serializable {
         } else return mPosition.y;
     }
 
-    public void setYPos(float yPos) {
+    void setYPos(float yPos) {
         this.mPosition.y = yPos;
     }
 
-    public float getDx() {
+    float getDx() {
         return mDPosition.x;
     }
 
-    public void setDx(float dx) {
+    void setDx(float dx) {
         this.mDPosition.x = dx;
     }
 
-    public float getDy() {
+    float getDy() {
         return mDPosition.y;
     }
 
-    public void setDy(float dy) {
+    void setDy(float dy) {
         this.mDPosition.y = dy;
     }
 
-    public Point getDPosition() {
+    Point getDPosition() {
         return mDPosition;
     }
 
-    public void setDPosition(Point DPosition) {
+    void setDPosition(Point DPosition) {
         this.mDPosition = DPosition;
     }
 
     //------------------------------------- rotation angle -----------------------------------------
-    public void incrementRotationAngle() {
+    void incrementRotationAngle() {
         this.mRotationAngle += mDRotationAngle;
     }
 
-    public double getRotationAngle() {
+    double getRotationAngle() {
         return mRotationAngle;
     }
 
-    public void setRotationAngle(double rotationAngle) {
+    void setRotationAngle(double rotationAngle) {
         this.mRotationAngle = rotationAngle;
     }
 
-    public double getDRotationAngle() {
+    double getDRotationAngle() {
         return mDRotationAngle;
     }
 
-    public void setDRotationAngle(double DRotationAngle) {
+    void setDRotationAngle(double DRotationAngle) {
         this.mDRotationAngle = DRotationAngle;
     }
 
-    public double getRotationMulCoefficient() {
+    double getRotationMulCoefficient() {
         return mRotationMulCoefficient;
     }
 
-    public void setRotationMulCoefficient(double rotationMulCoefficient) {
+    void setRotationMulCoefficient(double rotationMulCoefficient) {
         this.mRotationMulCoefficient = rotationMulCoefficient;
     }
 
     //----------------------------------------- visibility -----------------------------------------
-    public int getColor() {
+    int getColor() {
         return mColor;
     }
 
-    public void setColor(int color) {
+    void setColor(int color) {
         this.mColor = color;
     }
 
     @IntRange(from = 0, to = 255)
-    public int getAlpha() {
+    int getAlpha() {
         mAlpha = mAlpha > 255 ? 255 : mAlpha;
         return (int) (mAlpha < 0 ? (mAlpha = 0) : mAlpha);
     }
 
-    public void setAlpha(@FloatRange(from = 0, to = 255) float alpha) {
+    void setAlpha(@FloatRange(from = 0, to = 255) float alpha) {
         this.mAlpha = alpha;
     }
 
-    public float getDAlpha() {
+    float getDAlpha() {
         return mDAlpha;
     }
 
-    public void setDAlpha(@FloatRange(from = 0, to = 255) float DAlpha) {
+    void setDAlpha(@FloatRange(from = 0, to = 255) float DAlpha) {
         this.mDAlpha = DAlpha;
     }
 
-    public int incrementAlphaAndGet() {
+    int incrementAlphaAndGet() {
         mAlpha += mDAlpha;
         return getAlpha();
     }
 
-    public boolean isInvisible() {
+    boolean isInvisible() {
         return mAlpha <= 0 || mRadius <= 0;
     }
 
     //------------------------------------------- mRadius -------------------------------------------
-    public float getRadius() {
+    float getRadius() {
         return mRadius < 0 ? (mRadius = 0f) : mRadius;
     }
 
-    public void setRadius(float radius) {
+    void setRadius(float radius) {
         this.mRadius = radius < 0 ? 0 : radius;
     }
 
-    public float incrementRadiusAndGet() {
+    float incrementRadiusAndGet() {
         this.mRadius += this.mDRadius;
         return getRadius();
     }
 
-    public float getDRadius() {
+    float getDRadius() {
         return mDRadius;
     }
 
-    public void setDRadius(float DRadius) {
+    void setDRadius(float DRadius) {
         this.mDRadius = DRadius;
     }
 
     //======================================= other methods ========================================
-    public void reset() {
+    void reset() {
         copyTo(mInitialState, this);
     }
 
     @FloatRange(from = 0, to = 1)
-    public float getPercent() {
+    float getPercent() {
         if (mAlpha <= 0f && mDAlpha <= 0f) {
             return 1.f;
         }
@@ -243,20 +243,20 @@ class Bubble implements Serializable {
         return percent;
     }
 
-    public Bubble getInitialState() {
+    Bubble getInitialState() {
         return mInitialState;
     }
 
-    public void updateInitialState() {
+    void updateInitialState() {
         copyTo(this, this.mInitialState = new Bubble());
     }
 
     //==============================================================================================
-    public static class Point {
+    static class Point implements Serializable {
         float x;
         float y;
 
-        public Point(float x, float y) {
+        Point(float x, float y) {
             this.x = x;
             this.y = y;
         }
@@ -266,16 +266,16 @@ class Bubble implements Serializable {
             this.y = src.y;
         }
 
-        public float getX() {
+        float getX() {
             return x;
         }
 
-        public float getY() {
+        float getY() {
             return y;
         }
     }
 
-    public static final class Builder {
+    static final class Builder {
         private Point position;
         private Point dPosition;
         private int color;
@@ -290,73 +290,77 @@ class Bubble implements Serializable {
         private Builder() {
         }
 
-        public Builder position(Point position) {
+        Builder position(Point position) {
             this.position = new Point(position);
             return this;
         }
 
-        public Builder position(float positionX, float positionY) {
+        Builder position(float positionX, float positionY) {
             this.position = new Point(positionX, positionY);
             return this;
         }
 
-        public Builder dPosition(Point dPosition) {
+        Builder dPosition(Point dPosition) {
             this.dPosition = new Point(dPosition);
             return this;
         }
 
-        public Builder dPosition(float positionDx, float positionDy) {
+        Builder dPosition(float positionDx, float positionDy) {
             this.dPosition = new Point(positionDx, positionDy);
             return this;
         }
 
-        public Builder color(int color) {
+        Builder color(int color) {
             this.color = color;
             return this;
         }
 
-        public Builder radius(float radius) {
+        Builder radius(float radius) {
             this.radius = radius;
             return this;
         }
 
-        public Builder dRadius(float dRadius) {
+        Builder dRadius(float dRadius) {
             this.dRadius = dRadius;
             return this;
         }
 
-        public Builder alpha(@FloatRange(from = 0, to = 255) float alpha) {
+        Builder alpha(@FloatRange(from = 0, to = 255) float alpha) {
             this.alpha = alpha;
             return this;
         }
 
-        public Builder dAlpha(@FloatRange(from = -255, to = 255) float dAlpha) {
+        Builder dAlpha(@FloatRange(from = -255, to = 255) float dAlpha) {
             this.dAlpha = dAlpha;
             return this;
         }
 
-        public Builder rotationAngle(double rotationAngle) {
+        Builder rotationAngle(double rotationAngle) {
             this.rotationAngle = rotationAngle;
             return this;
         }
 
-        public Builder dRotationAngle(double dRotationAngle) {
+        Builder dRotationAngle(double dRotationAngle) {
             this.dRotationAngle = dRotationAngle;
             return this;
         }
 
-        public Builder rotationMulCoefficient(double rotationMulCoefficient) {
+        Builder rotationMulCoefficient(double rotationMulCoefficient) {
             this.rotationMulCoefficient = rotationMulCoefficient;
             return this;
         }
 
-        public Bubble build() {
+        Bubble build() {
             if (position == null) {
                 position = new Point(0, 0);
+            } else {
+                position = new Point(position);
             }
 
             if (dPosition == null) {
                 dPosition = new Point(0, 0);
+            } else {
+                dPosition = new Point(dPosition);
             }
             return new Bubble(this);
         }
