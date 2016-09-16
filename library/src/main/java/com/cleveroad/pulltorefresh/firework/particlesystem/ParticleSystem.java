@@ -425,6 +425,11 @@ public class ParticleSystem {
         emitWithGravity(emiter, Gravity.CENTER, particlesPerSecond, emitingTime);
     }
 
+    public void emit(int left, int top, int width, int height, int particlesPerSecond, int emitingTime) {
+        configureEmiter(left, top, width, height, Gravity.CENTER);
+        startEmiting(particlesPerSecond, emitingTime);
+    }
+
     /**
      * Starts emiting particles from a specific view. If at some point the number goes over the amount of particles availabe on create
      * no new particles will be created

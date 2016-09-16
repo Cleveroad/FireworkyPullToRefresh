@@ -377,7 +377,8 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         particleSystem1.emit((int) x, (int) y, 70, 500);
         particleSystem2.emit((int) x, (int) y, 70, 500);
 
-//        particleSystem1.emit();
+//        particleSystem1.emit((int) x, (int) y, 200, 200, 70, 500);
+//        particleSystem2.emit((int) x, (int) y, 200, 200, 70, 500);
 
         mParticleSystems.add(particleSystem1);
         mParticleSystems.add(particleSystem2);
