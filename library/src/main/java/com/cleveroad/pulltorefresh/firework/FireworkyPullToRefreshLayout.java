@@ -19,7 +19,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 
 
 /**
@@ -82,7 +82,7 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
     private boolean mIsBeingDragged;
 
     private View mTarget;
-    private ImageView mRefreshView;
+    ViewGroup mRefreshView;
     private FireworkRefreshDrawable mRefreshDrawable;
 
     private final Configuration mConfig;
@@ -140,9 +140,11 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
 
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
-        mRefreshView = new ImageView(context);
+        mRefreshView = new FrameLayout(context);
+        //noinspection ResourceType
+        mRefreshView.setId(121122);     //TODO refactor here
         mTotalDragDistance = Utils.convertDpToPixel(context, ROCKET_DRAG_MAX_DISTANCE);
-        mRefreshView.setImageDrawable(mRefreshDrawable = new FireworkRefreshDrawable(this));
+        mRefreshView.setBackgroundDrawable(mRefreshDrawable = new FireworkRefreshDrawable(this));
         mConfig =  mRefreshDrawable.getConfig();
 
         readAttributes(context, attrs);
