@@ -141,10 +141,16 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
         mRefreshView = new FrameLayout(context);
-        //noinspection ResourceType
-        mRefreshView.setId(121122);     //TODO refactor here
         mTotalDragDistance = Utils.convertDpToPixel(context, ROCKET_DRAG_MAX_DISTANCE);
-        mRefreshView.setBackgroundDrawable(mRefreshDrawable = new FireworkRefreshDrawable(this));
+        mRefreshDrawable = new FireworkRefreshDrawable(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mRefreshView.setBackground(mRefreshDrawable);
+        } else {
+            //noinspection deprecation
+            mRefreshView.setBackgroundDrawable(mRefreshDrawable);
+        }
+
         mConfig =  mRefreshDrawable.getConfig();
 
         readAttributes(context, attrs);

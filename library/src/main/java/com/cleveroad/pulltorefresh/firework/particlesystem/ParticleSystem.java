@@ -39,7 +39,7 @@ import java.util.TimerTask;
 
 public class ParticleSystem {
 
-    private static final long TIMMERTASK_INTERVAL = 50;
+    private static final long TIMER_TASK_INTERVAL = 50;
     private final List<Particle> mActiveParticles = /*Collections.synchronizedList(*/new LinkedList<>()/*)*/;
     private final ParticleTimerTask mTimerTask = new ParticleTimerTask(this);
     private ViewGroup mParentView;
@@ -48,9 +48,9 @@ public class ParticleSystem {
     private ArrayList<Particle> mParticles;
     private long mTimeToLive;
     private long mCurrentTime = 0;
-    private float mParticlesPerMilisecond;
+    private float mParticlesPerMillisecond;
     private int mActivatedParticles;
-    private long mEmitingTime;
+    private long mEmittingTime;
     private List<ParticleModifier> mModifiers;
     private List<ParticleInitializer> mInitializers;
     private ValueAnimator mAnimator;
@@ -58,10 +58,10 @@ public class ParticleSystem {
     private float mDpToPxScale;
     private int[] mParentLocation;
 
-    private int mEmiterXMin;
-    private int mEmiterXMax;
-    private int mEmiterYMin;
-    private int mEmiterYMax;
+    private int mEmitterXMin;
+    private int mEmitterXMax;
+    private int mEmitterYMin;
+    private int mEmitterYMax;
 
     private ParticleSystem(ViewGroup parentView, int maxParticles, long timeToLive) {
         mRandom = new Random();
@@ -114,11 +114,11 @@ public class ParticleSystem {
      *
      * @param a             The parent activity
      * @param maxParticles  The maximum number of particles
-     * @param drawableRedId The drawable resource to use as particle (supports Bitmaps and Animations)
+     * @param drawableResId The drawable resource to use as particle (supports Bitmaps and Animations)
      * @param timeToLive    The time to live for the particles
      */
-    public ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive) {
-        this(a, maxParticles, a.getResources().getDrawable(drawableRedId), timeToLive, android.R.id.content);
+    public ParticleSystem(Activity a, int maxParticles, int drawableResId, long timeToLive) {
+        this(a, maxParticles, ContextCompat.getDrawable(a, drawableResId), timeToLive, android.R.id.content);
     }
 
     /**
@@ -126,12 +126,25 @@ public class ParticleSystem {
      *
      * @param a             The parent activity
      * @param maxParticles  The maximum number of particles
-     * @param drawableRedId The drawable resource to use as particle (supports Bitmaps and Animations)
+     * @param drawableResId The drawable resource to use as particle (supports Bitmaps and Animations)
      * @param timeToLive    The time to live for the particles
      * @param parentViewId  The view Id for the parent of the particle system
      */
-    public ParticleSystem(Activity a, int maxParticles, int drawableRedId, long timeToLive, int parentViewId) {
-        this(a, maxParticles, ContextCompat.getDrawable(a, drawableRedId), timeToLive, parentViewId);
+    public ParticleSystem(Activity a, int maxParticles, int drawableResId, long timeToLive, int parentViewId) {
+        this(a, maxParticles, ContextCompat.getDrawable(a, drawableResId), timeToLive, parentViewId);
+    }
+
+    /**
+     * Creates a particle system with the given parameters
+     *
+     * @param a             The parent activity
+     * @param maxParticles  The maximum number of particles
+     * @param drawableResId The drawable resource to use as particle (supports Bitmaps and Animations)
+     * @param timeToLive    The time to live for the particles
+     * @param parentView    The parent view of the particle system
+     */
+    public ParticleSystem(Activity a, int maxParticles, int drawableResId, long timeToLive, ViewGroup parentView) {
+        this(parentView, maxParticles, ContextCompat.getDrawable(a, drawableResId), timeToLive);
     }
 
     /**
@@ -458,11 +471,11 @@ public class ParticleSystem {
 
     private void startEmiting(int particlesPerSecond) {
         mActivatedParticles = 0;
-        mParticlesPerMilisecond = particlesPerSecond / 1000f;
-        mEmitingTime = -1; // Meaning infinite
+        mParticlesPerMillisecond = particlesPerSecond / 1000f;
+        mEmittingTime = -1; // Meaning infinite
         updateParticlesBeforeStartTime(particlesPerSecond);
         mTimer = new Timer();
-        mTimer.schedule(mTimerTask, 0, TIMMERTASK_INTERVAL);
+        mTimer.schedule(mTimerTask, 0, TIMER_TASK_INTERVAL);
     }
 
     public void emit(int emitterX, int emitterY, int particlesPerSecond, int emitingTime) {
@@ -472,17 +485,17 @@ public class ParticleSystem {
 
     private void configureEmiter(int emitterX, int emitterY) {
         // We configure the emiter based on the window location to fix the offset of action bar if present
-        mEmiterXMin = emitterX - mParentLocation[0];
-        mEmiterXMax = mEmiterXMin;
-        mEmiterYMin = emitterY - mParentLocation[1];
-        mEmiterYMax = mEmiterYMin;
+        mEmitterXMin = emitterX - mParentLocation[0];
+        mEmitterXMax = mEmitterXMin;
+        mEmitterYMin = emitterY - mParentLocation[1];
+        mEmitterYMax = mEmitterYMin;
     }
 
     private void startEmiting(int particlesPerSecond, int emitingTime) {
         mActivatedParticles = 0;
-        mParticlesPerMilisecond = particlesPerSecond / 1000f;
+        mParticlesPerMillisecond = particlesPerSecond / 1000f;
         updateParticlesBeforeStartTime(particlesPerSecond);
-        mEmitingTime = emitingTime;
+        mEmittingTime = emitingTime;
         startAnimator(new LinearInterpolator(), emitingTime + mTimeToLive);
     }
 
@@ -519,7 +532,7 @@ public class ParticleSystem {
     public void oneShot(View emiter, int numParticles, Interpolator interpolator) {
         configureEmiter(emiter, Gravity.CENTER);
         mActivatedParticles = 0;
-        mEmitingTime = mTimeToLive;
+        mEmittingTime = mTimeToLive;
         // We create particles based in the parameters
         for (int i = 0; i < numParticles && i < mMaxParticles; i++) {
             activateParticle(0);
@@ -580,34 +593,34 @@ public class ParticleSystem {
 
         // Check horizontal gravity and set range
         if (hasGravity(gravity, Gravity.LEFT)) {
-            mEmiterXMin = x - mParentLocation[0];
-            mEmiterXMax = mEmiterXMin;
+            mEmitterXMin = x - mParentLocation[0];
+            mEmitterXMax = mEmitterXMin;
         } else if (hasGravity(gravity, Gravity.RIGHT)) {
-            mEmiterXMin = x + width - mParentLocation[0];
-            mEmiterXMax = mEmiterXMin;
+            mEmitterXMin = x + width - mParentLocation[0];
+            mEmitterXMax = mEmitterXMin;
         } else if (hasGravity(gravity, Gravity.CENTER_HORIZONTAL)) {
-            mEmiterXMin = x + width / 2 - mParentLocation[0];
-            mEmiterXMax = mEmiterXMin;
+            mEmitterXMin = x + width / 2 - mParentLocation[0];
+            mEmitterXMax = mEmitterXMin;
         } else {
             // All the range
-            mEmiterXMin = x - mParentLocation[0];
-            mEmiterXMax = x + width - mParentLocation[0];
+            mEmitterXMin = x - mParentLocation[0];
+            mEmitterXMax = x + width - mParentLocation[0];
         }
 
         // Now, vertical gravity and range
         if (hasGravity(gravity, Gravity.TOP)) {
-            mEmiterYMin = y - mParentLocation[1];
-            mEmiterYMax = mEmiterYMin;
+            mEmitterYMin = y - mParentLocation[1];
+            mEmitterYMax = mEmitterYMin;
         } else if (hasGravity(gravity, Gravity.BOTTOM)) {
-            mEmiterYMin = y + height - mParentLocation[1];
-            mEmiterYMax = mEmiterYMin;
+            mEmitterYMin = y + height - mParentLocation[1];
+            mEmitterYMax = mEmitterYMin;
         } else if (hasGravity(gravity, Gravity.CENTER_VERTICAL)) {
-            mEmiterYMin = y + height / 2 - mParentLocation[1];
-            mEmiterYMax = mEmiterYMin;
+            mEmitterYMin = y + height / 2 - mParentLocation[1];
+            mEmitterYMax = mEmitterYMin;
         } else {
             // All the range
-            mEmiterYMin = y - mParentLocation[1];
-            mEmiterYMax = y + height - mParentLocation[1];
+            mEmitterYMin = y - mParentLocation[1];
+            mEmitterYMax = y + height - mParentLocation[1];
         }
     }
 
@@ -622,8 +635,8 @@ public class ParticleSystem {
         for (int i = 0; i < mInitializers.size(); i++) {
             mInitializers.get(i).initParticle(p, mRandom);
         }
-        int particleX = getFromRange(mEmiterXMin, mEmiterXMax);
-        int particleY = getFromRange(mEmiterYMin, mEmiterYMax);
+        int particleX = getFromRange(mEmitterXMin, mEmitterXMax);
+        int particleY = getFromRange(mEmitterYMin, mEmitterYMax);
         p.configure(mTimeToLive, particleX, particleY);
         p.activate(delay, mModifiers);
         mActiveParticles.add(p);
@@ -638,9 +651,9 @@ public class ParticleSystem {
     }
 
     private void onUpdate(long miliseconds) {
-        while (((mEmitingTime > 0 && miliseconds < mEmitingTime) || mEmitingTime == -1) && // This point should emit
+        while (((mEmittingTime > 0 && miliseconds < mEmittingTime) || mEmittingTime == -1) && // This point should emit
                 !mParticles.isEmpty() && // We have particles in the pool
-                mActivatedParticles < mParticlesPerMilisecond * miliseconds) { // and we are under the number of particles that should be launched
+                mActivatedParticles < mParticlesPerMillisecond * miliseconds) { // and we are under the number of particles that should be launched
             // Activate a new particle
             activateParticle(miliseconds);
         }
@@ -667,7 +680,7 @@ public class ParticleSystem {
      */
     public void stopEmitting() {
         // The time to be emiting is the current time (as if it was a time-limited emiter
-        mEmitingTime = mCurrentTime;
+        mEmittingTime = mCurrentTime;
     }
 
     public synchronized List<Particle> getActiveParticles() {
@@ -729,7 +742,7 @@ public class ParticleSystem {
             if (mPs.get() != null) {
                 ParticleSystem ps = mPs.get();
                 ps.onUpdate(ps.mCurrentTime);
-                ps.mCurrentTime += TIMMERTASK_INTERVAL;
+                ps.mCurrentTime += TIMER_TASK_INTERVAL;
             }
         }
     }

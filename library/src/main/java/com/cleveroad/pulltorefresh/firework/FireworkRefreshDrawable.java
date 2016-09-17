@@ -14,10 +14,8 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import com.cleveroad.pulltorefresh.firework.particlesystem.Particle;
 import com.cleveroad.pulltorefresh.firework.particlesystem.ParticleSystem;
 
 import java.util.LinkedList;
@@ -351,20 +349,6 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
      * *********************************************************************************************
      */
     private void emitFirework(final Canvas canvas) {
-        ParticleSystem particleSystem1 = new ParticleSystem((Activity)getContext(), 20, R.drawable.ptr_star_white, 800L, mParent.mRefreshView.getId());
-        particleSystem1.setScaleRange(0.7f, 1.3f);
-        particleSystem1.setSpeedRange(0.03f, 0.07f);
-        particleSystem1.setRotationSpeedRange(90, 180);
-        particleSystem1.setFadeOut(500, new DecelerateInterpolator());
-        particleSystem1.setTintColor(getRandomBubbleColor());
-
-        ParticleSystem particleSystem2 = new ParticleSystem((Activity)getContext(), 20, R.drawable.ptr_star_white, 800L, mParent.mRefreshView.getId());
-        particleSystem2.setScaleRange(0.7f, 1.3f);
-        particleSystem2.setSpeedRange(0.03f, 0.07f);
-        particleSystem2.setRotationSpeedRange(90, 180);
-        particleSystem2.setFadeOut(500, new DecelerateInterpolator());
-        particleSystem2.setTintColor(getRandomBubbleColor());
-
         float width = canvas.getWidth();
         float height = getCurveYStart();
 
@@ -374,14 +358,17 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         float x = RND.nextInt((int) (width - fireworkWidth)) + fireworkWidth / 2f;
         float y = RND.nextInt((int) (height - fireworkHeight)) + fireworkHeight;
 
-        particleSystem1.emit((int) x, (int) y, 70, 500);
-        particleSystem2.emit((int) x, (int) y, 70, 500);
+        for(int i=0; i< MAX_FIREWORKS_COUNT; i++) {
+            ParticleSystem particleSystem = new ParticleSystem((Activity)getContext(), 20, R.drawable.ptr_star_white, 800L, mParent.mRefreshView);
+            particleSystem.setScaleRange(0.7f, 1.3f);
+            particleSystem.setSpeedRange(0.03f, 0.07f);
+            particleSystem.setRotationSpeedRange(90, 180);
+            particleSystem.setFadeOut(500, new DecelerateInterpolator());
+            particleSystem.setTintColor(getRandomBubbleColor());
 
-//        particleSystem1.emit((int) x, (int) y, 200, 200, 70, 500);
-//        particleSystem2.emit((int) x, (int) y, 200, 200, 70, 500);
-
-        mParticleSystems.add(particleSystem1);
-        mParticleSystems.add(particleSystem2);
+            mParticleSystems.add(particleSystem);
+            particleSystem.emit((int) x, (int) y, 70, 500);
+        }
     }
 
     private void drawFireworks(final Canvas canvas) {

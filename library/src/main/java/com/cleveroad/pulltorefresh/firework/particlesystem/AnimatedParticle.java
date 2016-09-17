@@ -20,22 +20,22 @@ public class AnimatedParticle extends Particle {
 	}
 
 	@Override
-	public boolean update(long miliseconds) {
-		boolean active = super.update(miliseconds);
+	public boolean update(long milliseconds) {
+		boolean active = super.update(milliseconds);
 		if (active) {
 			long animationElapsedTime = 0;
-			long realMiliseconds = miliseconds - mStartingMilisecond;
-			if (realMiliseconds > mTotalTime) {
+			long realMilliseconds = milliseconds - mStartingMilisecond;
+			if (realMilliseconds > mTotalTime) {
 				if (mAnimationDrawable.isOneShot()) {
 					return false;
 				}
 				else {
-					realMiliseconds = realMiliseconds % mTotalTime;
+					realMilliseconds = realMilliseconds % mTotalTime;
 				}
 			}
 			for (int i=0; i<mAnimationDrawable.getNumberOfFrames(); i++) {
 				animationElapsedTime += mAnimationDrawable.getDuration(i);
-				if (animationElapsedTime > realMiliseconds) {
+				if (animationElapsedTime > realMilliseconds) {
 					mImage = ((BitmapDrawable) mAnimationDrawable.getFrame(i)).getBitmap();
 					break;
 				}
