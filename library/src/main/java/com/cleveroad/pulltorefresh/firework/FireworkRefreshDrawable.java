@@ -10,19 +10,17 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
+import static com.cleveroad.pulltorefresh.firework.Configuration.FireworkStyle;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 
 class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private static final float SCALE_START_PERCENT = 0.5f;
-    private static final Random RND = new Random();
 
     private final Configuration mConfig;
     private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -75,10 +73,9 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     /**
      * Firework
      */
-    private static final int MAX_FIREWORKS_COUNT = 50;
     private static final int MAX_VISIBLE_FIREWORKS_COUNT = 2;
-    private final List<List<Bubble>> mVisibleFireworksList = new LinkedList<>();
     private int mFireworkBubbleRadius;
+    private FireworksDrawer mFireworksDrawer;
 
     /**
      * Curve
@@ -346,96 +343,14 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
      * Fireworks
      * *********************************************************************************************
      */
-    private List<Bubble> getFirework(final Canvas canvas) {
 
-        float width = canvas.getWidth();
-        float height = getCurveYStart();
-
-        float fireworkWidth = width / MAX_FIREWORKS_COUNT;
-
-        List<Bubble> firework = new ArrayList<>(50);
-
-        float x = RND.nextInt((int) (width - fireworkWidth / 2.)) + fireworkWidth / 2;
-        float y = RND.nextInt((int) (height * 0.6f - fireworkWidth)) + fireworkWidth / 2f;
-
-        Bubble.Builder builder = Bubble.newBuilder()
-                .position(new Bubble.Point(x, y))
-                .dRotationAngle(0.01d);
-
-        int color = getRandomBubbleColor();
-        builder.dPosition(0.f, 0.f).color(color)
-                .radius(mFireworkBubbleRadius * .2f).dRadius(.1f).alpha(255).dAlpha(-1.7f).build(); //center
-
-        color = getRandomBubbleColor();
-        for (int k = 360 / 45; k >= 0; k--) {
-            firework.add(builder
-                    .dPosition(Utils.rotateX(.7f, 0, 0, 0, k * 45), Utils.rotateY(.7f, 0, 0, 0, k * 45))
-                    .radius(mFireworkBubbleRadius * .4f)
-                    .dRadius(-.15f)
-                    .dAlpha(-.8f)
-                    .color(color)
-                    .build());
-        }
-
-        color = getRandomBubbleColor();
-        for (int k = 360 / 30; k >= 0; k--) {
-            firework.add(builder
-                    .dPosition(Utils.rotateX(.5f, 0, 0, 0, k * 30), Utils.rotateY(.5f, 0, 0, 0, k * 30))
-                    .radius(mFireworkBubbleRadius * .2f)
-                    .dRadius(-.1f)
-                    .dAlpha(-.8f)
-                    .color(color)
-                    .build());
-        }
-
-        color = getRandomBubbleColor();
-        for (int k = 360 / 30; k >= 0; k--) {
-            firework.add(builder
-                    .dPosition(Utils.rotateX(.3f, 0, 0, 0, k * 30), Utils.rotateY(.3f, 0, 0, 0, k * 30))
-                    .radius(mFireworkBubbleRadius * .2f)
-                    .dRadius(-.1f)
-                    .dAlpha(-.8f)
-                    .color(color)
-                    .build());
-        }
-
-        return firework;
-    }
 
     private void drawFireworks(final Canvas canvas) {
         if (!mIsAnimationStarted || mRocketAnimationPercent < 0.95f) {
             return;
         }
 
-        if(mVisibleFireworksList.isEmpty()) {
-            mVisibleFireworksList.add(getFirework(canvas));
-        }
-
-        for (int i = 0; i < mVisibleFireworksList.size(); i++) {
-            List<Bubble> firework = mVisibleFireworksList.get(i);
-            boolean isFireworkFinished = true;
-            boolean isNeedToShowNextFirework = true;
-
-            for (Bubble b : firework) {
-                b.incrementRotationAngle();
-                mPaint.setColor(b.getColor());
-                mPaint.setAlpha(b.incrementAlphaAndGet());
-                float radius = b.incrementRadiusAndGet();
-                canvas.drawCircle(b.incrementXAndGet(), b.incrementYAndGet(), radius, mPaint);
-                isFireworkFinished &= b.isInvisible();
-                isNeedToShowNextFirework &= b.getPercent() > 0.45f;
-            }
-
-            if (isFireworkFinished) {
-                mVisibleFireworksList.remove(i);
-                i--;
-                continue;
-            }
-
-            if (isNeedToShowNextFirework && mVisibleFireworksList.size() < MAX_VISIBLE_FIREWORKS_COUNT) {
-                mVisibleFireworksList.add(getFirework(canvas));
-            }
-        }
+        mFireworksDrawer.draw(canvas, canvas.getWidth(), (int) getCurveYStart());
     }
 
     private void drawRocketSmoke(Canvas canvas) {
@@ -470,6 +385,11 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
     private void setPercent(float percent) {
         mPercent = percent;
+        if(percent == 0f && mFlameAnimator.isRunning()) {
+            mFlameAnimator.cancel();
+        } else if(!mFlameAnimator.isRunning()) {
+            mFlameAnimator.start();
+        }
     }
 
     @Override
@@ -519,7 +439,6 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 mFlameScale = setVariable((float) animation.getAnimatedValue());
             }
         });
-        mFlameAnimator.start();
 
         //rocket animation
         mRocketAnimator.cancel();
@@ -562,7 +481,6 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 }
             }
         });
-
     }
 
     Configuration getConfig() {
@@ -576,20 +494,23 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
     private void resetOrigins() {
         setPercent(0f);
-        mVisibleFireworksList.clear();
         mRocketSmokeBubbles.clear();
-
         mIgnoredRocketXOffset = 0;
         mRocketAnimationPercent = 0;
         mCurveTargetPointAnimValue = CURVE_TARGET_POINT_VALUE_NOT_ANIMATED;
 
         mIsRocketAnimationFinished = false;
-    }
 
-    @ColorInt
-    private int getRandomBubbleColor() {
-        int fireworkColors[] = mConfig.getFireworkColors();
-        return fireworkColors[RND.nextInt(fireworkColors.length)];
+        if(mFireworksDrawer != null) {
+            mFireworksDrawer.reset();
+        }
+
+        FireworkStyle fireworkStyle = getConfig().getFireworkStyle();
+        if(fireworkStyle == FireworkStyle.MODERN && !(mFireworksDrawer instanceof ModernFireworksDrawer)) {
+            mFireworksDrawer = new ModernFireworksDrawer(getConfig(), MAX_VISIBLE_FIREWORKS_COUNT, mParent);
+        } else if(fireworkStyle == FireworkStyle.CLASSIC && !(mFireworksDrawer instanceof ClassicFireworksDrawer)) {
+            mFireworksDrawer = new ClassicFireworksDrawer(getConfig(), MAX_VISIBLE_FIREWORKS_COUNT, mFireworkBubbleRadius);
+        }
     }
 
     private float[] mapPoints(Canvas canvas, float x, float y) {

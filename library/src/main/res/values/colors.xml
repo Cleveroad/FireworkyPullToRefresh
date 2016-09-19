@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ptr_bubble1">#6fa7d7</color>
-    <color name="ptr_bubble2">#4858af</color>
-    <color name="ptr_bubble3">#5940fc</color>
+    <color name="ptr_bubble2">#ff353f</color>
+    <color name="ptr_bubble3">#ffec1e</color>
     <color name="ptr_bubble4">#40cdfc</color>
-    <color name="ptr_bubble5">#2e9cc1</color>
+    <color name="ptr_bubble5">#e14aff</color>
     <color name="ptr_bubble6">#73c0da</color>
-    <color name="ptr_bubble7">#8165cf</color>
+    <color name="ptr_bubble7">#da8bff</color>
     <color name="ptr_bubble8">#57e4b2</color>
     <color name="ptr_bubble9">#10afed</color>
     <color name="ptr_bubble10">#68cf9a</color>
-    <color name="ptr_bubble11">#913fcc</color>
-    <color name="ptr_bubble12">#6b8bf5</color>
+    <color name="ptr_bubble11">#b958ff</color>
+    <color name="ptr_bubble12">#5bff66</color>
     <color name="ptr_bubble13">#64ceaa</color>
-    <color name="ptr_bubble14">#2e609c</color>
+    <color name="ptr_bubble14">#ff4400</color>
     <color name="ptr_bubble15">#77c672</color>
     <color name="ptr_bubble16">#c9d962</color>
     <color name="ptr_bubble17">#cf6571</color>
