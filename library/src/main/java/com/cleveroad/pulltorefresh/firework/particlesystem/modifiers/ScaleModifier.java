@@ -31,15 +31,14 @@ public class ScaleModifier implements ParticleModifier {
     }
 
     @Override
-    public void apply(Particle particle, long miliseconds) {
-        if (miliseconds < mStartTime) {
+    public void apply(Particle particle, long milliseconds) {
+        if (milliseconds < mStartTime) {
             particle.mScale = mInitialValue;
-        } else if (miliseconds > mEndTime) {
+        } else if (milliseconds > mEndTime) {
             particle.mScale = mFinalValue;
         } else {
-            float interpolaterdValue = mInterpolator.getInterpolation((miliseconds - mStartTime) * 1f / mDuration);
-            float newScale = mInitialValue + mValueIncrement * interpolaterdValue;
-            particle.mScale = newScale;
+            float interpolaterdValue = mInterpolator.getInterpolation((milliseconds - mStartTime) * 1f / mDuration);
+            particle.mScale = mInitialValue + mValueIncrement * interpolaterdValue;
         }
     }
 

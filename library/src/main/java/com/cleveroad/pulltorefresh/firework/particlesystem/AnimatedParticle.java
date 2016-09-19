@@ -24,7 +24,7 @@ class AnimatedParticle extends Particle {
         boolean active = super.update(milliseconds);
         if (active) {
             long animationElapsedTime = 0;
-            long realMilliseconds = milliseconds - mStartingMilisecond;
+            long realMilliseconds = milliseconds - super.mStartingMilliseconds;
             if (realMilliseconds > mTotalTime) {
                 if (mAnimationDrawable.isOneShot()) {
                     return false;
