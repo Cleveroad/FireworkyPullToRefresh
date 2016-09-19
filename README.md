@@ -63,6 +63,7 @@ Just wrap your view:
 | ptr_background  | Background drawable |
 | ptr_backgroundColor | Background color |
 | ptr_rocketAnimDuration  | Rocket flight duration |
+| ptr_fireworkStyle | Fireworks animation style - `classic` or `modern` |
 ### Via Java code ###
 
 ```Java
@@ -76,6 +77,8 @@ mPullToRefresh.getConfig().setBackgroundColorFromResources(R.color.background);
 
 mPullToRefresh.getConfig().setFireworkColors(colorsIntArray);
 mPullToRefresh.getConfig().setFireworkColors(R.array.fireworkColors);
+
+mPullRefreshView.getConfig().setFireworkStyle(Configuration.FireworkStyle.MODERN);
 
 mPullToRefresh.getConfig().setRocketAnimDuration(1000L);
 
