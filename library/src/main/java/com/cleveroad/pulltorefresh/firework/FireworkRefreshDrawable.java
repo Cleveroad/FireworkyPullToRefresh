@@ -4,28 +4,23 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Region;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-import android.view.animation.DecelerateInterpolator;
 
-import com.cleveroad.pulltorefresh.firework.particlesystem.ParticleSystem;
+import static com.cleveroad.pulltorefresh.firework.Configuration.FireworkStyle;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 
 class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private static final float SCALE_START_PERCENT = 0.5f;
-    private static final Random RND = new Random();
 
     private final Configuration mConfig;
     private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -78,9 +73,9 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     /**
      * Firework
      */
-    private static final int MAX_FIREWORKS_COUNT = 3;
+    private static final int MAX_VISIBLE_FIREWORKS_COUNT = 2;
     private int mFireworkBubbleRadius;
-    private List<ParticleSystem> mParticleSystems = new LinkedList<>();
+    private FireworksDrawer mFireworksDrawer;
 
     /**
      * Curve
@@ -348,52 +343,14 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
      * Fireworks
      * *********************************************************************************************
      */
-    private void emitFirework(final Canvas canvas) {
-        float width = canvas.getWidth();
-        float height = getCurveYStart();
 
-        float fireworkWidth = width / MAX_FIREWORKS_COUNT;
-        float fireworkHeight = height / MAX_FIREWORKS_COUNT;
-
-        float x = RND.nextInt((int) (width - fireworkWidth)) + fireworkWidth / 2f;
-        float y = RND.nextInt((int) (height - fireworkHeight)) + fireworkHeight;
-
-        for(int i=0; i< MAX_FIREWORKS_COUNT; i++) {
-            ParticleSystem particleSystem = new ParticleSystem(
-                    (Activity)getContext(),     //activity
-                    20,                         //max particles
-                    R.drawable.ptr_star_white,  //icon
-                    800L,                       //time to live
-                    mParent.mRefreshView);      //parent view
-            particleSystem.setScaleRange(0.7f, 1.3f);
-            particleSystem.setSpeedRange(0.03f, 0.07f);
-            particleSystem.setRotationSpeedRange(90, 180);
-            particleSystem.setFadeOut(500, new DecelerateInterpolator());
-            particleSystem.setTintColor(getRandomBubbleColor());
-
-            mParticleSystems.add(particleSystem);
-            particleSystem.emit((int) x, (int) y, 70, 500);
-        }
-    }
 
     private void drawFireworks(final Canvas canvas) {
         if (!mIsAnimationStarted || mRocketAnimationPercent < 0.95f) {
             return;
         }
 
-        if (mParticleSystems.isEmpty()) {
-            emitFirework(canvas);
-        }
-
-        for (int i = 0; i < mParticleSystems.size(); i++) {
-            ParticleSystem particleSystem = mParticleSystems.get(i);
-            particleSystem.draw(canvas);
-
-            if(!particleSystem.isRunning()) {
-                mParticleSystems.remove(i);
-                i--;
-            }
-        }
+        mFireworksDrawer.draw(canvas, canvas.getWidth(), (int) getCurveYStart());
     }
 
     private void drawRocketSmoke(Canvas canvas) {
@@ -538,24 +495,22 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private void resetOrigins() {
         setPercent(0f);
         mRocketSmokeBubbles.clear();
-        mParticleSystems.clear();
-
         mIgnoredRocketXOffset = 0;
         mRocketAnimationPercent = 0;
         mCurveTargetPointAnimValue = CURVE_TARGET_POINT_VALUE_NOT_ANIMATED;
 
         mIsRocketAnimationFinished = false;
 
-        for (ParticleSystem ps : mParticleSystems) {
-            ps.stopEmitting();
-            ps.cancel();
+        if(mFireworksDrawer != null) {
+            mFireworksDrawer.reset();
         }
-    }
 
-    @ColorInt
-    private int getRandomBubbleColor() {
-        int fireworkColors[] = mConfig.getFireworkColors();
-        return fireworkColors[RND.nextInt(fireworkColors.length)];
+        FireworkStyle fireworkStyle = getConfig().getFireworkStyle();
+        if(fireworkStyle == FireworkStyle.MODERN && !(mFireworksDrawer instanceof ModernFireworksDrawer)) {
+            mFireworksDrawer = new ModernFireworksDrawer(getConfig(), MAX_VISIBLE_FIREWORKS_COUNT, mParent);
+        } else if(fireworkStyle == FireworkStyle.CLASSIC && !(mFireworksDrawer instanceof ClassicFireworksDrawer)) {
+            mFireworksDrawer = new ClassicFireworksDrawer(getConfig(), MAX_VISIBLE_FIREWORKS_COUNT, mFireworkBubbleRadius);
+        }
     }
 
     private float[] mapPoints(Canvas canvas, float x, float y) {

@@ -178,6 +178,7 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
             }
             getConfig().setFireworkColors(array.getResourceId(R.styleable.FireworkyPullToRefreshLayout_ptr_fireworkColors, R.array.ptr_defColorSet));
             getConfig().setRocketAnimDuration(array.getInteger(R.styleable.FireworkyPullToRefreshLayout_ptr_rocketAnimDuration, 500));
+            getConfig().setFireworkStyle(Configuration.FireworkStyle.fromId(array.getInt(R.styleable.FireworkyPullToRefreshLayout_ptr_fireworkStyle, 0)));
         } finally {
             array.recycle();
         }

@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.cleveroad.pulltorefresh.firework.Configuration;
 import com.cleveroad.pulltorefresh.firework.FireworkyPullToRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
