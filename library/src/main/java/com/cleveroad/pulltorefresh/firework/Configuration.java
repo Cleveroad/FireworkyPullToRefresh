@@ -25,6 +25,7 @@ public class Configuration {
     private Drawable mRocketDrawable;
     private Drawable mFlameDrawable;
     private Drawable mBackgroundDrawable;
+    private FireworkStyle mFireworkStyle;
 
     Configuration(Context context) {
         mContext = context;
@@ -33,6 +34,7 @@ public class Configuration {
         setFlame(R.drawable.ptr_ic_flame);
         setBackgroundColor(Color.BLACK);
         setRocketAnimDuration(500L);
+        mFireworkStyle = FireworkStyle.CLASSIC;
     }
 
     /**
@@ -168,5 +170,38 @@ public class Configuration {
      */
     public void setRocketAnimDuration(long rocketAnimDuration) {
         mRocketAnimDuration = rocketAnimDuration;
+    }
+
+    /**
+     * Use this method to set fireworks style
+     * @param fireworkStyle firework animation style
+     */
+    public void setFireworkStyle(FireworkStyle fireworkStyle) {
+        mFireworkStyle = fireworkStyle;
+    }
+
+    FireworkStyle getFireworkStyle() {
+        return mFireworkStyle;
+    }
+
+    /**
+     * Firework styles
+     */
+    public enum FireworkStyle {
+        CLASSIC(0), MODERN(1);
+        int id;
+
+        FireworkStyle(int id) {
+            this.id = id;
+        }
+
+        public static FireworkStyle fromId(int id) {
+            for (FireworkStyle fireworkStyle : values()) {
+                if (fireworkStyle.id == id) {
+                    return fireworkStyle;
+                }
+            }
+            throw new IllegalArgumentException();
+        }
     }
 }

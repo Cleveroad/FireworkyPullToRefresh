@@ -17,7 +17,7 @@ What will you receive by using the Fireworky Pull To Refresh component in your a
 ### Installation ###
 by Gradle:
 ```groovy
-    compile 'com.cleveroad:fireworkypulltorefresh:1.0.0'
+    compile 'com.cleveroad:fireworkypulltorefresh:1.0.1'
 ```
 or just download zip and import module "fireworky-pull-to-refresh" to be able to modify the sources.
 ### Supported Views ###
@@ -63,6 +63,7 @@ Just wrap your view:
 | ptr_background  | Background drawable |
 | ptr_backgroundColor | Background color |
 | ptr_rocketAnimDuration  | Rocket flight duration |
+| ptr_fireworkStyle | Fireworks animation style - `classic` (by default) or `modern` |
 ### Via Java code ###
 
 ```Java
@@ -76,6 +77,8 @@ mPullToRefresh.getConfig().setBackgroundColorFromResources(R.color.background);
 
 mPullToRefresh.getConfig().setFireworkColors(colorsIntArray);
 mPullToRefresh.getConfig().setFireworkColors(R.array.fireworkColors);
+
+mPullRefreshView.getConfig().setFireworkStyle(Configuration.FireworkStyle.MODERN);
 
 mPullToRefresh.getConfig().setRocketAnimDuration(1000L);
 
