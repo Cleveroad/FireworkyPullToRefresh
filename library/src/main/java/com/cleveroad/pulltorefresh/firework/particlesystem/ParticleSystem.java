@@ -24,7 +24,7 @@ import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.Particle
 import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.RotationInitiazer;
 import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.RotationSpeedInitializer;
 import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.ScaleInitializer;
-import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.SpeeddByComponentsInitializer;
+import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.SpeedByComponentsInitializer;
 import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.SpeeddModuleAndRangeInitializer;
 import com.cleveroad.pulltorefresh.firework.particlesystem.modifiers.AlphaModifier;
 import com.cleveroad.pulltorefresh.firework.particlesystem.modifiers.ParticleModifier;
@@ -40,7 +40,7 @@ import java.util.TimerTask;
 public class ParticleSystem {
 
     private static final long TIMER_TASK_INTERVAL = 50;
-    private final List<Particle> mActiveParticles = /*Collections.synchronizedList(*/new LinkedList<>()/*)*/;
+    private final List<Particle> mActiveParticles = new LinkedList<>();
     private final ParticleTimerTask mTimerTask = new ParticleTimerTask(this);
     private ViewGroup mParentView;
     private int mMaxParticles;
@@ -281,7 +281,7 @@ public class ParticleSystem {
      * @return This.
      */
     public ParticleSystem setSpeedByComponentsRange(float speedMinX, float speedMaxX, float speedMinY, float speedMaxY) {
-        mInitializers.add(new SpeeddByComponentsInitializer(dpToPx(speedMinX), dpToPx(speedMaxX),
+        mInitializers.add(new SpeedByComponentsInitializer(dpToPx(speedMinX), dpToPx(speedMaxX),
                 dpToPx(speedMinY), dpToPx(speedMaxY)));
         return this;
     }
@@ -543,7 +543,7 @@ public class ParticleSystem {
     }
 
     public void setTintColor(@ColorInt int color) {
-        for(Particle p : mParticles) {
+        for (Particle p : mParticles) {
             p.setTintColor(color);
         }
     }
@@ -629,17 +629,17 @@ public class ParticleSystem {
     }
 
     private void activateParticle(long delay) {
-        Particle p = mParticles.remove(0);
-        p.init();
+        Particle particle = mParticles.remove(0);
+        particle.init();
         // Initialization goes before configuration, scale is required before can be configured properly
         for (int i = 0; i < mInitializers.size(); i++) {
-            mInitializers.get(i).initParticle(p, mRandom);
+            mInitializers.get(i).initParticle(particle, mRandom);
         }
         int particleX = getFromRange(mEmitterXMin, mEmitterXMax);
         int particleY = getFromRange(mEmitterYMin, mEmitterYMax);
-        p.configure(mTimeToLive, particleX, particleY);
-        p.activate(delay, mModifiers);
-        mActiveParticles.add(p);
+        particle.configure(mTimeToLive, particleX, particleY);
+        particle.activate(delay, mModifiers);
+        mActiveParticles.add(particle);
         mActivatedParticles++;
     }
 

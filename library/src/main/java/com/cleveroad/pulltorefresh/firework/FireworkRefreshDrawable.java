@@ -359,7 +359,12 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         float y = RND.nextInt((int) (height - fireworkHeight)) + fireworkHeight;
 
         for(int i=0; i< MAX_FIREWORKS_COUNT; i++) {
-            ParticleSystem particleSystem = new ParticleSystem((Activity)getContext(), 20, R.drawable.ptr_star_white, 800L, mParent.mRefreshView);
+            ParticleSystem particleSystem = new ParticleSystem(
+                    (Activity)getContext(),     //activity
+                    20,                         //max particles
+                    R.drawable.ptr_star_white,  //icon
+                    800L,                       //time to live
+                    mParent.mRefreshView);      //parent view
             particleSystem.setScaleRange(0.7f, 1.3f);
             particleSystem.setSpeedRange(0.03f, 0.07f);
             particleSystem.setRotationSpeedRange(90, 180);
