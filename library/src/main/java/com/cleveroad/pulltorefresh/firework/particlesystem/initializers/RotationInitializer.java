@@ -5,18 +5,18 @@ import com.cleveroad.pulltorefresh.firework.particlesystem.Particle;
 import java.util.Random;
 
 
-public class RotationInitiazer implements ParticleInitializer {
+public class RotationInitializer implements ParticleInitializer {
 
     private int mMinAngle;
     private int mMaxAngle;
 
-    public RotationInitiazer(int minAngle, int maxAngle) {
+    public RotationInitializer(int minAngle, int maxAngle) {
         mMinAngle = minAngle;
         mMaxAngle = maxAngle;
     }
 
     @Override
-    public void initParticle(Particle p, Random r) {
-        p.mInitialRotation = mMinAngle == mMaxAngle ? mMinAngle : r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
+    public void initParticle(Particle particle, Random random) {
+        particle.setInitialRotation(mMinAngle == mMaxAngle ? mMinAngle : random.nextInt(mMaxAngle - mMinAngle) + mMinAngle);
     }
 }

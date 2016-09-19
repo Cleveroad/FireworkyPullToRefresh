@@ -16,8 +16,8 @@ public class RotationSpeedInitializer implements ParticleInitializer {
     }
 
     @Override
-    public void initParticle(Particle p, Random r) {
-        p.mRotationSpeed = r.nextFloat() * (mMaxRotationSpeed - mMinRotationSpeed) + mMinRotationSpeed;
+    public void initParticle(Particle particle, Random random) {
+        particle.setRotationSpeed(random.nextFloat() * (mMaxRotationSpeed - mMinRotationSpeed) + mMinRotationSpeed);
     }
 
 }

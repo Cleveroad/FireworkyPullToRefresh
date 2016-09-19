@@ -13,18 +13,18 @@ import java.util.List;
 
 public class Particle {
 
-    public float mCurrentX;
-    public float mCurrentY;
-    public float mScale = 1f;
-    public int mAlpha = 255;
-    public float mInitialRotation = 0f;
-    public float mRotationSpeed = 0f;
-    public float mSpeedX = 0f;
-    public float mSpeedY = 0f;
-    public float mAccelerationX;
-    public float mAccelerationY;
-    long mStartingMilliseconds;
-    Bitmap mImage;
+    private float mCurrentX;
+    private float mCurrentY;
+    private float mScale = 1f;
+    private int mAlpha = 255;
+    private float mInitialRotation = 0f;
+    private float mRotationSpeed = 0f;
+    private float mSpeedX = 0f;
+    private float mSpeedY = 0f;
+    private float mAccelerationX;
+    private float mAccelerationY;
+    private long mStartingMilliseconds;
+    private Bitmap mImage;
     private Matrix mMatrix;
     private Paint mPaint;
     private float mInitialX;
@@ -43,17 +43,17 @@ public class Particle {
         mPaint = new Paint();
     }
 
-    public Particle(Bitmap bitmap) {
+    Particle(Bitmap bitmap) {
         this();
         mImage = bitmap;
     }
 
-    public void init() {
+    void init() {
         mScale = 1;
         mAlpha = 255;
     }
 
-    public void configure(long timeToLive, float emiterX, float emiterY) {
+    void configure(long timeToLive, float emiterX, float emiterY) {
         mBitmapHalfWidth = mImage.getWidth() / 2;
         mBitmapHalfHeight = mImage.getHeight() / 2;
 
@@ -65,7 +65,7 @@ public class Particle {
         mTimeToLive = timeToLive;
     }
 
-    public boolean update(long milliseconds) {
+    boolean update(long milliseconds) {
         long realMilliseconds = milliseconds - mStartingMilliseconds;
         if (realMilliseconds > mTimeToLive) {
             return false;
@@ -79,7 +79,7 @@ public class Particle {
         return true;
     }
 
-    public void draw(Canvas c) {
+    void draw(Canvas canvas) {
         mMatrix.reset();
         mMatrix.postRotate(mRotation, mBitmapHalfWidth, mBitmapHalfHeight);
         mMatrix.postScale(mScale, mScale, mBitmapHalfWidth, mBitmapHalfHeight);
@@ -89,17 +89,121 @@ public class Particle {
             mPaint.setColorFilter(new PorterDuffColorFilter(mTintColor, PorterDuff.Mode.MULTIPLY));
         }
         mPaint.setAlpha(mAlpha);
-        c.drawBitmap(mImage, mMatrix, mPaint);
+        canvas.drawBitmap(mImage, mMatrix, mPaint);
     }
 
-    public Particle activate(long startingMilliseconds, List<ParticleModifier> modifiers) {
+    Particle activate(long startingMilliseconds, List<ParticleModifier> modifiers) {
         mStartingMilliseconds = startingMilliseconds;
         // We do store a reference to the list, there is no need to copy, since the modifiers do not carte about states
         mModifiers = modifiers;
         return this;
     }
 
-    public void setTintColor(Integer tintColor) {
+    void setTintColor(Integer tintColor) {
         mTintColor = tintColor;
+    }
+
+    public float getCurrentX() {
+        return mCurrentX;
+    }
+
+    public void setCurrentX(float currentX) {
+        mCurrentX = currentX;
+    }
+
+    public float getCurrentY() {
+        return mCurrentY;
+    }
+
+    public void setCurrentY(float currentY) {
+        mCurrentY = currentY;
+    }
+
+    public float getScale() {
+        return mScale;
+    }
+
+    public void setScale(float scale) {
+        mScale = scale;
+    }
+
+    public int getAlpha() {
+        return mAlpha;
+    }
+
+    public void setAlpha(int alpha) {
+        mAlpha = alpha;
+    }
+
+    public float getInitialRotation() {
+        return mInitialRotation;
+    }
+
+    public void setInitialRotation(float initialRotation) {
+        mInitialRotation = initialRotation;
+    }
+
+    public float getRotationSpeed() {
+        return mRotationSpeed;
+    }
+
+    public void setRotationSpeed(float rotationSpeed) {
+        mRotationSpeed = rotationSpeed;
+    }
+
+    public float getSpeedX() {
+        return mSpeedX;
+    }
+
+    public void setSpeedX(float speedX) {
+        mSpeedX = speedX;
+    }
+
+    public float getSpeedY() {
+        return mSpeedY;
+    }
+
+    public void setSpeedY(float speedY) {
+        mSpeedY = speedY;
+    }
+
+    public float getAccelerationX() {
+        return mAccelerationX;
+    }
+
+    public void setAccelerationX(float accelerationX) {
+        mAccelerationX = accelerationX;
+    }
+
+    public float getAccelerationY() {
+        return mAccelerationY;
+    }
+
+    public void setAccelerationY(float accelerationY) {
+        mAccelerationY = accelerationY;
+    }
+
+    public long getStartingMilliseconds() {
+        return mStartingMilliseconds;
+    }
+
+    public void setStartingMilliseconds(long startingMilliseconds) {
+        mStartingMilliseconds = startingMilliseconds;
+    }
+
+    public Bitmap getImage() {
+        return mImage;
+    }
+
+    public void setImage(Bitmap image) {
+        mImage = image;
+    }
+
+    public Matrix getMatrix() {
+        return mMatrix;
+    }
+
+    public void setMatrix(Matrix matrix) {
+        mMatrix = matrix;
     }
 }

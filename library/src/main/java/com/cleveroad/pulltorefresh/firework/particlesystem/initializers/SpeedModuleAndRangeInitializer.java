@@ -5,14 +5,14 @@ import com.cleveroad.pulltorefresh.firework.particlesystem.Particle;
 import java.util.Random;
 
 
-public class SpeeddModuleAndRangeInitializer implements ParticleInitializer {
+public class SpeedModuleAndRangeInitializer implements ParticleInitializer {
 
 	private float mSpeedMin;
 	private float mSpeedMax;
 	private int mMinAngle;
 	private int mMaxAngle;
 
-	public SpeeddModuleAndRangeInitializer(float speedMin, float speedMax, int minAngle, int maxAngle) {
+	public SpeedModuleAndRangeInitializer(float speedMin, float speedMax, int minAngle, int maxAngle) {
 		mSpeedMin = speedMin;
 		mSpeedMax = speedMax;
 		mMinAngle = minAngle;
@@ -33,18 +33,18 @@ public class SpeeddModuleAndRangeInitializer implements ParticleInitializer {
 	}
 
 	@Override
-	public void initParticle(Particle p, Random r) {
-		float speed = r.nextFloat()*(mSpeedMax-mSpeedMin) + mSpeedMin;
+	public void initParticle(Particle particle, Random random) {
+		float speed = random.nextFloat()*(mSpeedMax-mSpeedMin) + mSpeedMin;
 		int angle;
 		if (mMaxAngle == mMinAngle) {
 			angle = mMinAngle;
 		}
 		else {
-			angle = r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
+			angle = random.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
 		}
 		float angleInRads = (float) (angle*Math.PI/180f);
-		p.mSpeedX = (float) (speed * Math.cos(angleInRads));
-		p.mSpeedY = (float) (speed * Math.sin(angleInRads));
+		particle.setSpeedX((float) (speed * Math.cos(angleInRads)));
+		particle.setSpeedY((float) (speed * Math.sin(angleInRads)));
 	}
 
 }

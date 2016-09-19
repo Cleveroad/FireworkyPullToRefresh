@@ -20,15 +20,15 @@ public class AccelerationInitializer implements ParticleInitializer {
     }
 
     @Override
-    public void initParticle(Particle p, Random r) {
+    public void initParticle(Particle particle, Random random) {
         float angle = mMinAngle;
         if (mMaxAngle != mMinAngle) {
-            angle = r.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
+            angle = random.nextInt(mMaxAngle - mMinAngle) + mMinAngle;
         }
         float angleInRads = (float) (angle * Math.PI / 180f);
-        float value = r.nextFloat() * (mMaxValue - mMinValue) + mMinValue;
-        p.mAccelerationX = (float) (value * Math.cos(angleInRads));
-        p.mAccelerationY = (float) (value * Math.sin(angleInRads));
+        float value = random.nextFloat() * (mMaxValue - mMinValue) + mMinValue;
+        particle.setAccelerationX((float) (value * Math.cos(angleInRads)));
+        particle.setAccelerationY((float) (value * Math.sin(angleInRads)));
     }
 
 }

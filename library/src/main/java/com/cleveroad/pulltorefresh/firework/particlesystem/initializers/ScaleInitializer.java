@@ -16,8 +16,8 @@ public class ScaleInitializer implements ParticleInitializer {
     }
 
     @Override
-    public void initParticle(Particle p, Random r) {
-        p.mScale = r.nextFloat() * (mMaxScale - mMinScale) + mMinScale;
+    public void initParticle(Particle particle, Random random) {
+        particle.setScale(random.nextFloat() * (mMaxScale - mMinScale) + mMinScale);
     }
 
 }

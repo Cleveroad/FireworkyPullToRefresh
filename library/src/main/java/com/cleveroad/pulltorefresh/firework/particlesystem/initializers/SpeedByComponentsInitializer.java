@@ -20,9 +20,9 @@ public class SpeedByComponentsInitializer implements ParticleInitializer {
     }
 
     @Override
-    public void initParticle(Particle p, Random r) {
-        p.mSpeedX = r.nextFloat() * (mMaxSpeedX - mMinSpeedX) + mMinSpeedX;
-        p.mSpeedY = r.nextFloat() * (mMaxSpeedY - mMinSpeedY) + mMinSpeedY;
+    public void initParticle(Particle particle, Random random) {
+        particle.setSpeedX(random.nextFloat() * (mMaxSpeedX - mMinSpeedX) + mMinSpeedX);
+        particle.setSpeedY(random.nextFloat() * (mMaxSpeedY - mMinSpeedY) + mMinSpeedY);
     }
 
 }

@@ -21,11 +21,11 @@ import android.view.animation.LinearInterpolator;
 
 import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.AccelerationInitializer;
 import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.ParticleInitializer;
-import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.RotationInitiazer;
+import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.RotationInitializer;
 import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.RotationSpeedInitializer;
 import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.ScaleInitializer;
 import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.SpeedByComponentsInitializer;
-import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.SpeeddModuleAndRangeInitializer;
+import com.cleveroad.pulltorefresh.firework.particlesystem.initializers.SpeedModuleAndRangeInitializer;
 import com.cleveroad.pulltorefresh.firework.particlesystem.modifiers.AlphaModifier;
 import com.cleveroad.pulltorefresh.firework.particlesystem.modifiers.ParticleModifier;
 
@@ -52,7 +52,7 @@ public class ParticleSystem {
     private int mActivatedParticles;
     private long mEmittingTime;
     private List<ParticleModifier> mModifiers;
-    private List<ParticleInitializer> mInitializers;
+    private List<ParticleInitializer> mParticleInitializers;
     private ValueAnimator mAnimator;
     private Timer mTimer;
     private float mDpToPxScale;
@@ -70,7 +70,7 @@ public class ParticleSystem {
         setParentViewGroup(parentView);
 
         mModifiers = new ArrayList<>();
-        mInitializers = new ArrayList<>();
+        mParticleInitializers = new ArrayList<>();
 
         mMaxParticles = maxParticles;
         // Create the particles
@@ -244,7 +244,7 @@ public class ParticleSystem {
     }
 
     public ParticleSystem setSpeedRange(float speedMin, float speedMax) {
-        mInitializers.add(new SpeeddModuleAndRangeInitializer(dpToPx(speedMin), dpToPx(speedMax), 0, 360));
+        mParticleInitializers.add(new SpeedModuleAndRangeInitializer(dpToPx(speedMin), dpToPx(speedMax), 0, 360));
         return this;
     }
 
@@ -266,7 +266,7 @@ public class ParticleSystem {
         while (maxAngle < minAngle) {
             maxAngle += 360;
         }
-        mInitializers.add(new SpeeddModuleAndRangeInitializer(dpToPx(speedMin), dpToPx(speedMax), minAngle, maxAngle));
+        mParticleInitializers.add(new SpeedModuleAndRangeInitializer(dpToPx(speedMin), dpToPx(speedMax), minAngle, maxAngle));
         return this;
     }
 
@@ -281,7 +281,7 @@ public class ParticleSystem {
      * @return This.
      */
     public ParticleSystem setSpeedByComponentsRange(float speedMinX, float speedMaxX, float speedMinY, float speedMaxY) {
-        mInitializers.add(new SpeedByComponentsInitializer(dpToPx(speedMinX), dpToPx(speedMaxX),
+        mParticleInitializers.add(new SpeedByComponentsInitializer(dpToPx(speedMinX), dpToPx(speedMaxX),
                 dpToPx(speedMinY), dpToPx(speedMaxY)));
         return this;
     }
@@ -295,7 +295,7 @@ public class ParticleSystem {
      * @return This.
      */
     public ParticleSystem setInitialRotationRange(int minAngle, int maxAngle) {
-        mInitializers.add(new RotationInitiazer(minAngle, maxAngle));
+        mParticleInitializers.add(new RotationInitializer(minAngle, maxAngle));
         return this;
     }
 
@@ -308,7 +308,7 @@ public class ParticleSystem {
      * @return This.
      */
     public ParticleSystem setScaleRange(float minScale, float maxScale) {
-        mInitializers.add(new ScaleInitializer(minScale, maxScale));
+        mParticleInitializers.add(new ScaleInitializer(minScale, maxScale));
         return this;
     }
 
@@ -320,7 +320,7 @@ public class ParticleSystem {
      * @return This.
      */
     public ParticleSystem setRotationSpeed(float rotationSpeed) {
-        mInitializers.add(new RotationSpeedInitializer(rotationSpeed, rotationSpeed));
+        mParticleInitializers.add(new RotationSpeedInitializer(rotationSpeed, rotationSpeed));
         return this;
     }
 
@@ -333,7 +333,7 @@ public class ParticleSystem {
      * @return This.
      */
     public ParticleSystem setRotationSpeedRange(float minRotationSpeed, float maxRotationSpeed) {
-        mInitializers.add(new RotationSpeedInitializer(minRotationSpeed, maxRotationSpeed));
+        mParticleInitializers.add(new RotationSpeedInitializer(minRotationSpeed, maxRotationSpeed));
         return this;
     }
 
@@ -350,7 +350,7 @@ public class ParticleSystem {
      * @return
      */
     public ParticleSystem setAccelerationModuleAndAndAngleRange(float minAcceleration, float maxAcceleration, int minAngle, int maxAngle) {
-        mInitializers.add(new AccelerationInitializer(dpToPx(minAcceleration), dpToPx(maxAcceleration),
+        mParticleInitializers.add(new AccelerationInitializer(dpToPx(minAcceleration), dpToPx(maxAcceleration),
                 minAngle, maxAngle));
         return this;
     }
@@ -366,7 +366,7 @@ public class ParticleSystem {
      * @return This.
      */
     public ParticleSystem setAcceleration(float acceleration, int angle) {
-        mInitializers.add(new AccelerationInitializer(acceleration, acceleration, angle, angle));
+        mParticleInitializers.add(new AccelerationInitializer(acceleration, acceleration, angle, angle));
         return this;
     }
 
@@ -632,8 +632,8 @@ public class ParticleSystem {
         Particle particle = mParticles.remove(0);
         particle.init();
         // Initialization goes before configuration, scale is required before can be configured properly
-        for (int i = 0; i < mInitializers.size(); i++) {
-            mInitializers.get(i).initParticle(particle, mRandom);
+        for (int i = 0; i < mParticleInitializers.size(); i++) {
+            mParticleInitializers.get(i).initParticle(particle, mRandom);
         }
         int particleX = getFromRange(mEmitterXMin, mEmitterXMax);
         int particleY = getFromRange(mEmitterYMin, mEmitterYMax);
@@ -733,7 +733,7 @@ public class ParticleSystem {
 
         private final WeakReference<ParticleSystem> mPs;
 
-        public ParticleTimerTask(ParticleSystem ps) {
+        ParticleTimerTask(ParticleSystem ps) {
             mPs = new WeakReference<>(ps);
         }
 

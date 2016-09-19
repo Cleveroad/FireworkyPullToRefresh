@@ -16,29 +16,29 @@ public class AlphaModifier implements ParticleModifier {
     private float mValueIncrement;
     private Interpolator mInterpolator;
 
-    public AlphaModifier(int initialValue, int finalValue, long startMilis, long endMilis, Interpolator interpolator) {
+    public AlphaModifier(int initialValue, int finalValue, long startMillis, long endMillis, Interpolator interpolator) {
         mInitialValue = initialValue;
         mFinalValue = finalValue;
-        mStartTime = startMilis;
-        mEndTime = endMilis;
+        mStartTime = startMillis;
+        mEndTime = endMillis;
         mDuration = mEndTime - mStartTime;
         mValueIncrement = mFinalValue - mInitialValue;
         mInterpolator = interpolator;
     }
 
-    public AlphaModifier(int initialValue, int finalValue, long startMilis, long endMilis) {
-        this(initialValue, finalValue, startMilis, endMilis, new LinearInterpolator());
+    public AlphaModifier(int initialValue, int finalValue, long startMillis, long endMillis) {
+        this(initialValue, finalValue, startMillis, endMillis, new LinearInterpolator());
     }
 
     @Override
     public void apply(Particle particle, long milliseconds) {
         if (milliseconds < mStartTime) {
-            particle.mAlpha = mInitialValue;
+            particle.setAlpha(mInitialValue);
         } else if (milliseconds > mEndTime) {
-            particle.mAlpha = mFinalValue;
+            particle.setAlpha(mFinalValue);
         } else {
-            float interpolaterdValue = mInterpolator.getInterpolation((milliseconds - mStartTime) * 1f / mDuration);
-            particle.mAlpha = (int) (mInitialValue + mValueIncrement * interpolaterdValue);
+            float interpolatedValue = mInterpolator.getInterpolation((milliseconds - mStartTime) * 1f / mDuration);
+            particle.setAlpha((int) (mInitialValue + mValueIncrement * interpolatedValue));
         }
     }
 

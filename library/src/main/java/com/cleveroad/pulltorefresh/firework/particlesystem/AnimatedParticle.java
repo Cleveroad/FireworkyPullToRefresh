@@ -11,7 +11,7 @@ class AnimatedParticle extends Particle {
 
     AnimatedParticle(AnimationDrawable animationDrawable) {
         mAnimationDrawable = animationDrawable;
-        mImage = ((BitmapDrawable) mAnimationDrawable.getFrame(0)).getBitmap();
+        super.setImage(((BitmapDrawable) mAnimationDrawable.getFrame(0)).getBitmap());
         // If it is a repeating animation, calculate the time
         mTotalTime = 0;
         for (int i = 0; i < mAnimationDrawable.getNumberOfFrames(); i++) {
@@ -24,7 +24,7 @@ class AnimatedParticle extends Particle {
         boolean active = super.update(milliseconds);
         if (active) {
             long animationElapsedTime = 0;
-            long realMilliseconds = milliseconds - super.mStartingMilliseconds;
+            long realMilliseconds = milliseconds - super.getStartingMilliseconds();
             if (realMilliseconds > mTotalTime) {
                 if (mAnimationDrawable.isOneShot()) {
                     return false;
@@ -35,7 +35,7 @@ class AnimatedParticle extends Particle {
             for (int i = 0; i < mAnimationDrawable.getNumberOfFrames(); i++) {
                 animationElapsedTime += mAnimationDrawable.getDuration(i);
                 if (animationElapsedTime > realMilliseconds) {
-                    mImage = ((BitmapDrawable) mAnimationDrawable.getFrame(i)).getBitmap();
+                    super.setImage(((BitmapDrawable) mAnimationDrawable.getFrame(i)).getBitmap());
                     break;
                 }
             }
