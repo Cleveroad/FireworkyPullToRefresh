@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -256,6 +257,8 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_SUPER_STATE, super.onSaveInstanceState());
         bundle.putBoolean(EXTRA_IS_REFRESHING, mIsRefreshing);
+
+        getTargetView().setTop(0);
         return bundle;
     }
 
@@ -431,7 +434,7 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
     }
 
     @Nullable
-    private View getTargetView() {
+    View getTargetView() {
         if (mTarget == null) {
             for (int i = 0; i < getChildCount(); i++) {
                 View child = getChildAt(i);
@@ -462,13 +465,17 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
 
     private void moveToStart(float interpolatedTime) {
         int targetTop = mFrom - (int) (mFrom * interpolatedTime);
-        float targetPercent = mFromDragPercent * (1.0f - interpolatedTime);
-        int offset = targetTop - mTarget.getTop();
 
-        mCurrentDragPercent = targetPercent;
+        mCurrentDragPercent = mFromDragPercent * (1.0f - interpolatedTime);
         mRefreshDrawable.setPercent(mCurrentDragPercent, true);
         mTarget.setPadding(mTargetPaddingLeft, mTargetPaddingTop, mTargetPaddingRight, mTargetPaddingBottom + targetTop);
-        setTargetOffsetTop(offset, false);
+
+        //************************************************************************************************
+//        setTargetOffsetTop(targetTop - mTarget.getTop(), false);
+        mTarget.offsetTopAndBottom(targetTop - mTarget.getTop());
+        mRefreshDrawable.setOffsetTopAndBottom((int) (-getTotalDragDistance() * interpolatedTime));
+        mCurrentOffsetTop = mTarget.getTop();
+        Log.e("FPTRL", "moveToStart with time=" + interpolatedTime);
     }
 
     private void setTargetOffsetTop(int offset, boolean requiresUpdate) {

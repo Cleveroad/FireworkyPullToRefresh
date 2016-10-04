@@ -12,11 +12,13 @@ import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-
-import static com.cleveroad.pulltorefresh.firework.Configuration.FireworkStyle;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.cleveroad.pulltorefresh.firework.Configuration.FireworkStyle;
 
 
 class FireworkRefreshDrawable extends BaseRefreshDrawable {
@@ -84,6 +86,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private static final float CURVE_VERTICAL_POINT_PERCENT = 0.7f;
     private float mCurveTargetPointAnimValue = CURVE_TARGET_POINT_VALUE_NOT_ANIMATED;
     private final ValueAnimator mCurveAnimator = new ValueAnimator();
+    private final ValueAnimator mOffsetAnimator = new ValueAnimator();
     /**
      * Constructor
      */
@@ -398,6 +401,11 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         invalidateSelf();
     }
 
+    void setOffsetTopAndBottom(int offsetTop) {
+        mTop = offsetTop;
+        invalidateSelf();
+    }
+
     @Override
     public void start() {
         resetOrigins();
@@ -478,6 +486,34 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 mCurveTargetPointAnimValue = !mSkipRocketAnimation ? -(float) (maxDy * Math.cos(value) * force) : 0f;
                 if (mSkipRocketAnimation) {
                     valueAnimator.cancel();
+                }
+            }
+        });
+
+        //offset animation
+        mOffsetAnimator.cancel();
+        mOffsetAnimator.setDuration(getConfig().getOffsetAnimDuration());
+        mOffsetAnimator.setInterpolator(new DecelerateInterpolator());
+        mOffsetAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                View targetView = mParent.getTargetView();
+                if(targetView != null) {
+                    int top = (Integer) animation.getAnimatedValue();
+                    targetView.setTop(top);
+                }
+            }
+        });
+
+        mCurveAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                View targetView = mParent.getTargetView();
+                if(targetView != null) {
+                    int targetViewTop = targetView.getTop();
+                    int targetViewOffset = mParent.getTotalDragDistance() - (int) getCurveYStart();
+                    mOffsetAnimator.setIntValues(targetViewTop, targetViewTop - targetViewOffset);
+                    mOffsetAnimator.start();
                 }
             }
         });

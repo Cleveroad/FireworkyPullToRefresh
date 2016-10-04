@@ -22,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ListViewFragment extends Fragment implements FireworkyPullToRefreshLayout.OnRefreshListener {
-    public static final int REFRESH_DELAY = 4500;
+    public static final int REFRESH_DELAY = 18500;
     private static final int ITEMS_COUNT = 25;
     private static final List<Object> mDummyList;
     static {
