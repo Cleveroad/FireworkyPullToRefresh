@@ -21,6 +21,7 @@ public class Configuration {
     private final Context mContext;
     private int[] mFireworkColors;
     private long mRocketAnimDuration = 1000L;
+    private long mOffsetAnimDuration = 500L;
 
     private Drawable mRocketDrawable;
     private Drawable mFlameDrawable;
@@ -182,6 +183,10 @@ public class Configuration {
 
     FireworkStyle getFireworkStyle() {
         return mFireworkStyle;
+    }
+
+    long getOffsetAnimDuration() {
+        return mOffsetAnimDuration;
     }
 
     /**

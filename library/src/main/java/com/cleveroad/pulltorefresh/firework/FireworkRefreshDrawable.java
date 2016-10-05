@@ -12,11 +12,13 @@ import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
-
-import static com.cleveroad.pulltorefresh.firework.Configuration.FireworkStyle;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.cleveroad.pulltorefresh.firework.Configuration.FireworkStyle;
 
 
 class FireworkRefreshDrawable extends BaseRefreshDrawable {
@@ -68,6 +70,18 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
      */
     private static final long FLAME_BLINKING_DURATION = 300;
     private final ValueAnimator mFlameAnimator = new ValueAnimator();
+    {
+        mFlameAnimator.setFloatValues(0f, 1f);
+        mFlameAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        mFlameAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        mFlameAnimator.setDuration(FLAME_BLINKING_DURATION);
+        mFlameAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mFlameScale = setVariable((float) animation.getAnimatedValue());
+            }
+        });
+    }
     private float mFlameScale = 1;
 
     /**
@@ -84,6 +98,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private static final float CURVE_VERTICAL_POINT_PERCENT = 0.7f;
     private float mCurveTargetPointAnimValue = CURVE_TARGET_POINT_VALUE_NOT_ANIMATED;
     private final ValueAnimator mCurveAnimator = new ValueAnimator();
+    private final ValueAnimator mOffsetAnimator = new ValueAnimator();
     /**
      * Constructor
      */
@@ -398,6 +413,11 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         invalidateSelf();
     }
 
+    void setOffsetTopAndBottom(int offsetTop) {
+        mTop = offsetTop;
+        invalidateSelf();
+    }
+
     @Override
     public void start() {
         resetOrigins();
@@ -427,19 +447,6 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
     @Override
     protected void setupAnimations() {
-        //flame animation
-        mFlameAnimator.cancel();
-        mFlameAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        mFlameAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        mFlameAnimator.setDuration(FLAME_BLINKING_DURATION);
-        mFlameAnimator.setFloatValues(0f, 1f);
-        mFlameAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mFlameScale = setVariable((float) animation.getAnimatedValue());
-            }
-        });
-
         //rocket animation
         mRocketAnimator.cancel();
         mRocketAnimator.setDuration(mConfig.getRocketAnimDuration());
@@ -478,6 +485,33 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 mCurveTargetPointAnimValue = !mSkipRocketAnimation ? -(float) (maxDy * Math.cos(value) * force) : 0f;
                 if (mSkipRocketAnimation) {
                     valueAnimator.cancel();
+                }
+            }
+        });
+
+        //offset animation
+        mOffsetAnimator.cancel();
+        mOffsetAnimator.setDuration(getConfig().getOffsetAnimDuration());
+        mOffsetAnimator.setInterpolator(new DecelerateInterpolator());
+        mOffsetAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                View targetView = mParent.getTargetView();
+                if(targetView != null) {
+                    //noinspection ResourceType
+                    targetView.setTop(mSkipRocketAnimation ? (int) getCurveYStart() : (Integer) valueAnimator.getAnimatedValue());
+                }
+            }
+        });
+
+        //after curve animation starting offset animation
+        mCurveAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                View targetView = mParent.getTargetView();
+                if(targetView != null) {
+                    mOffsetAnimator.setIntValues(targetView.getTop(), (int) getCurveYStart());
+                    mOffsetAnimator.start();
                 }
             }
         });
@@ -521,6 +555,10 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     }
 
     void setSkipRocketAnimation(boolean skipRocketAnimation) {
-        this.mSkipRocketAnimation = skipRocketAnimation;
+        mSkipRocketAnimation = skipRocketAnimation;
+    }
+
+    boolean isSkipRocketAnimation() {
+        return mSkipRocketAnimation;
     }
 }

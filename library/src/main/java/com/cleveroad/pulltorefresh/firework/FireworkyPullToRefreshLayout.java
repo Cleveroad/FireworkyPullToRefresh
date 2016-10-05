@@ -104,7 +104,13 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
 
             mCurrentDragPercent = mFromDragPercent - (mFromDragPercent - 1.0f) * interpolatedTime;
             mRefreshDrawable.setPercent(mCurrentDragPercent, false);
-            setTargetOffsetTop(offset, false);
+
+            if (mRefreshDrawable.isSkipRocketAnimation()) {
+                mRefreshDrawable.setOffsetTopAndBottom(0);
+                mCurrentOffsetTop = mTarget.getTop();
+            } else {
+                setTargetOffsetTop(offset, false);
+            }
         }
     };
     private final Animation.AnimationListener mToStartListener = new SimpleAnimationListener() {
@@ -431,7 +437,7 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
     }
 
     @Nullable
-    private View getTargetView() {
+    View getTargetView() {
         if (mTarget == null) {
             for (int i = 0; i < getChildCount(); i++) {
                 View child = getChildAt(i);
@@ -462,13 +468,14 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
 
     private void moveToStart(float interpolatedTime) {
         int targetTop = mFrom - (int) (mFrom * interpolatedTime);
-        float targetPercent = mFromDragPercent * (1.0f - interpolatedTime);
-        int offset = targetTop - mTarget.getTop();
 
-        mCurrentDragPercent = targetPercent;
+        mCurrentDragPercent = mFromDragPercent * (1.0f - interpolatedTime);
         mRefreshDrawable.setPercent(mCurrentDragPercent, true);
         mTarget.setPadding(mTargetPaddingLeft, mTargetPaddingTop, mTargetPaddingRight, mTargetPaddingBottom + targetTop);
-        setTargetOffsetTop(offset, false);
+
+        mTarget.offsetTopAndBottom(targetTop - mTarget.getTop());
+        mRefreshDrawable.setOffsetTopAndBottom((int) (-getTotalDragDistance() * interpolatedTime));
+        mCurrentOffsetTop = mTarget.getTop();
     }
 
     private void setTargetOffsetTop(int offset, boolean requiresUpdate) {
