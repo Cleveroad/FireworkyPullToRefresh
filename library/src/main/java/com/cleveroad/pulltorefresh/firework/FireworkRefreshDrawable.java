@@ -70,6 +70,18 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
      */
     private static final long FLAME_BLINKING_DURATION = 300;
     private final ValueAnimator mFlameAnimator = new ValueAnimator();
+    {
+        mFlameAnimator.setFloatValues(0f, 1f);
+        mFlameAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        mFlameAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        mFlameAnimator.setDuration(FLAME_BLINKING_DURATION);
+        mFlameAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                mFlameScale = setVariable((float) animation.getAnimatedValue());
+            }
+        });
+    }
     private float mFlameScale = 1;
 
     /**
@@ -435,19 +447,6 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
     @Override
     protected void setupAnimations() {
-        //flame animation
-        mFlameAnimator.cancel();
-        mFlameAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        mFlameAnimator.setRepeatMode(ValueAnimator.REVERSE);
-        mFlameAnimator.setDuration(FLAME_BLINKING_DURATION);
-        mFlameAnimator.setFloatValues(0f, 1f);
-        mFlameAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                mFlameScale = setVariable((float) animation.getAnimatedValue());
-            }
-        });
-
         //rocket animation
         mRocketAnimator.cancel();
         mRocketAnimator.setDuration(mConfig.getRocketAnimDuration());
@@ -505,6 +504,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
             }
         });
 
+        //after curve animation starting offset animation
         mCurveAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {

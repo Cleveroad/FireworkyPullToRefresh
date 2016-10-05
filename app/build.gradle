@@ -3,7 +3,7 @@ apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "com.cleveroad.fireworkpulltorefresh"
         minSdkVersion 17
@@ -24,7 +24,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     //Versions
-    final SUPPORT_LIB_VERSION = '24.2.0'
+    final SUPPORT_LIB_VERSION = '24.2.1'
     final BUTTER_KNIFE_VERSION = '8.1.0'
 
     //Support libs

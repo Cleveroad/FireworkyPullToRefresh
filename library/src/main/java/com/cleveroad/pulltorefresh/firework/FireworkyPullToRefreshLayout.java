@@ -262,8 +262,6 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_SUPER_STATE, super.onSaveInstanceState());
         bundle.putBoolean(EXTRA_IS_REFRESHING, mIsRefreshing);
-
-        getTargetView().setTop(0);
         return bundle;
     }
 
@@ -475,8 +473,6 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
         mRefreshDrawable.setPercent(mCurrentDragPercent, true);
         mTarget.setPadding(mTargetPaddingLeft, mTargetPaddingTop, mTargetPaddingRight, mTargetPaddingBottom + targetTop);
 
-        //************************************************************************************************
-//        setTargetOffsetTop(targetTop - mTarget.getTop(), false);
         mTarget.offsetTopAndBottom(targetTop - mTarget.getTop());
         mRefreshDrawable.setOffsetTopAndBottom((int) (-getTotalDragDistance() * interpolatedTime));
         mCurrentOffsetTop = mTarget.getTop();

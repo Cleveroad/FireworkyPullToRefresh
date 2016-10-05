@@ -11,18 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.cleveroad.pulltorefresh.firework.Configuration;
 import com.cleveroad.pulltorefresh.firework.FireworkyPullToRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ListViewFragment extends Fragment implements FireworkyPullToRefreshLayout.OnRefreshListener {
-    public static final int REFRESH_DELAY = 18500;
+    public static final int REFRESH_DELAY = 4500;
     private static final int ITEMS_COUNT = 25;
     private static final List<Object> mDummyList;
     static {
@@ -66,13 +64,6 @@ public class ListViewFragment extends Fragment implements FireworkyPullToRefresh
                 mPullRefreshView.setRefreshing(mIsRefreshing);
             }
         });
-
-        mPullRefreshView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mPullRefreshView.setRefreshing(true);
-            }
-        }, 3000);
     }
 
     @Override
