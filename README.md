@@ -63,7 +63,7 @@ Just wrap your view:
 | ptr_background  | Background drawable |
 | ptr_backgroundColor | Background color |
 | ptr_rocketAnimDuration  | Rocket flight duration |
-| ptr_fireworkStyle | Fireworks animation style - `classic` or `modern` |
+| ptr_fireworkStyle | Fireworks animation style - `classic` (by default) or `modern` |
 ### Via Java code ###
 
 ```Java
