@@ -496,11 +496,11 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         mOffsetAnimator.setInterpolator(new DecelerateInterpolator());
         mOffsetAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 View targetView = mParent.getTargetView();
                 if(targetView != null) {
-                    int top = (Integer) animation.getAnimatedValue();
-                    targetView.setTop(top);
+                    //noinspection ResourceType
+                    targetView.setTop(mSkipRocketAnimation ? (int) getCurveYStart() : (Integer) valueAnimator.getAnimatedValue());
                 }
             }
         });
@@ -510,9 +510,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
             public void onAnimationEnd(Animator animation) {
                 View targetView = mParent.getTargetView();
                 if(targetView != null) {
-                    int targetViewTop = targetView.getTop();
-                    int targetViewOffset = mParent.getTotalDragDistance() - (int) getCurveYStart();
-                    mOffsetAnimator.setIntValues(targetViewTop, targetViewTop - targetViewOffset);
+                    mOffsetAnimator.setIntValues(targetView.getTop(), (int) getCurveYStart());
                     mOffsetAnimator.start();
                 }
             }
@@ -557,6 +555,10 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     }
 
     void setSkipRocketAnimation(boolean skipRocketAnimation) {
-        this.mSkipRocketAnimation = skipRocketAnimation;
+        mSkipRocketAnimation = skipRocketAnimation;
+    }
+
+    boolean isSkipRocketAnimation() {
+        return mSkipRocketAnimation;
     }
 }

@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -105,7 +104,13 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
 
             mCurrentDragPercent = mFromDragPercent - (mFromDragPercent - 1.0f) * interpolatedTime;
             mRefreshDrawable.setPercent(mCurrentDragPercent, false);
-            setTargetOffsetTop(offset, false);
+
+            if (mRefreshDrawable.isSkipRocketAnimation()) {
+                mRefreshDrawable.setOffsetTopAndBottom(0);
+                mCurrentOffsetTop = mTarget.getTop();
+            } else {
+                setTargetOffsetTop(offset, false);
+            }
         }
     };
     private final Animation.AnimationListener mToStartListener = new SimpleAnimationListener() {
@@ -475,7 +480,6 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
         mTarget.offsetTopAndBottom(targetTop - mTarget.getTop());
         mRefreshDrawable.setOffsetTopAndBottom((int) (-getTotalDragDistance() * interpolatedTime));
         mCurrentOffsetTop = mTarget.getTop();
-        Log.e("FPTRL", "moveToStart with time=" + interpolatedTime);
     }
 
     private void setTargetOffsetTop(int offset, boolean requiresUpdate) {

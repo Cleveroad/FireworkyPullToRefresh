@@ -66,6 +66,13 @@ public class ListViewFragment extends Fragment implements FireworkyPullToRefresh
                 mPullRefreshView.setRefreshing(mIsRefreshing);
             }
         });
+
+        mPullRefreshView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPullRefreshView.setRefreshing(true);
+            }
+        }, 3000);
     }
 
     @Override
