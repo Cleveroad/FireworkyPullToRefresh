@@ -34,7 +34,8 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private boolean mSkipRocketAnimation = false;
 
     private float mPercent;
-    private float mPointerPositionX, mPointerPositionY;
+    private float mPointerPositionX;
+    private float mPointerPositionY;
     private int   mScreenWidth;
     private int   mTop;
 
@@ -51,7 +52,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private static final float ROCKET_INITIAL_SCALE = 1.1f;
     private static final float ROCKET_FINAL_SCALE   = 0.8f;
     private static final float ROCKET_MAX_DEVIATION_ANGLE = 45;
-    private final ValueAnimator mRocketAnimator = new ValueAnimator();
+    private ValueAnimator mRocketAnimator;
     private float mRocketAnimationPercent;
     private float mIgnoredRocketXOffset = 0;
     private float mRocketTopOffset;
@@ -63,15 +64,15 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
      */
     private final List<Bubble> mRocketSmokeBubbles = new LinkedList<>();
     private final Bubble.Builder mRocketSmokeBuilder = Bubble.newBuilder().alpha(80).dAlpha(-0.5f).dRadius(-0.05f);
-    private float mPointCache[] = new float[2];
+    private float[] mPointCache = new float[2];
 
     /**
      * Flame
      */
     private static final long FLAME_BLINKING_DURATION = 300;
-    private final ValueAnimator mFlameAnimator = new ValueAnimator();
+    private final ValueAnimator mFlameAnimator;
     {
-        mFlameAnimator.setFloatValues(0f, 1f);
+        mFlameAnimator = ValueAnimator.ofFloat(0f, 1f);
         mFlameAnimator.setRepeatCount(ValueAnimator.INFINITE);
         mFlameAnimator.setRepeatMode(ValueAnimator.REVERSE);
         mFlameAnimator.setDuration(FLAME_BLINKING_DURATION);
@@ -97,8 +98,9 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private static final float CURVE_TARGET_POINT_VALUE_NOT_ANIMATED = Float.MAX_VALUE;
     private static final float CURVE_VERTICAL_POINT_PERCENT = 0.7f;
     private float mCurveTargetPointAnimValue = CURVE_TARGET_POINT_VALUE_NOT_ANIMATED;
-    private final ValueAnimator mCurveAnimator = new ValueAnimator();
-    private final ValueAnimator mOffsetAnimator = new ValueAnimator();
+    private ValueAnimator mCurveAnimator;
+    private ValueAnimator mOffsetAnimator;
+
     /**
      * Constructor
      */
@@ -139,7 +141,9 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        if (mScreenWidth <= 0) return;
+        if (mScreenWidth <= 0) {
+            return;
+        }
 
         final int saveCount = canvas.save();
 
@@ -197,7 +201,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         return BezierCurveHelper.getQuadTargetPoint(
                 getCurveYStart(),
                 getCurveYEnd(),
-                mCurveTargetPointAnimValue != CURVE_TARGET_POINT_VALUE_NOT_ANIMATED ?
+                Float.compare(mCurveTargetPointAnimValue, CURVE_TARGET_POINT_VALUE_NOT_ANIMATED) != 0 ?
                         getCurveYStart() + mCurveTargetPointAnimValue
                         :
                         mParent.getTotalDragDistance(),
@@ -280,7 +284,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
 
             offsetXDelta = (float) ((mParent.getTotalDragDistance() - offsetY) * tan) * sign;
-            if(mIgnoredRocketXOffset == 0) {
+            if(Float.compare(mIgnoredRocketXOffset, 0f) == 0) {
                 mIgnoredRocketXOffset = offsetXDelta;
             }
             offsetXDelta -= mIgnoredRocketXOffset;
@@ -289,7 +293,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
             final Bubble lastSmokeBubble = mRocketSmokeBubbles.isEmpty() ? null : mRocketSmokeBubbles.get(mRocketSmokeBubbles.size() - 1);
             int rocketDPositionSign = lastSmokeBubble == null || lastSmokeBubble.getDPosition().getX() < 0 ? 1 : -1;
 
-            float points[] = mapPoints(
+            float[] points = mapPoints(
                     canvas,
                     offsetX + offsetXDelta + rocketDrawable.getIntrinsicWidth() / 2f,
                     offsetY + rocketDrawable.getIntrinsicHeight());
@@ -332,8 +336,9 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     private double getRocketAngle() {
         double xTouch = mPointerPositionX;
         double yTouch = mPointerPositionY;
-        if(xTouch == 0. && yTouch == 0.) {
-            return mLastRocketAngle = 0;
+        if(Double.compare(xTouch, 0.) == 0 && Double.compare(yTouch, 0.) == 0) {
+            mLastRocketAngle = 0;
+            return mLastRocketAngle;
         }
 
         int sign = 1;
@@ -348,7 +353,8 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
         result =  (90. - result) * sign + 180.;
         if(result > 360 - ROCKET_MAX_DEVIATION_ANGLE || result < ROCKET_MAX_DEVIATION_ANGLE) {
-            return mLastRocketAngle = result;
+            mLastRocketAngle = result;
+            return mLastRocketAngle;
         } else {
             return mLastRocketAngle;
         }
@@ -400,7 +406,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
 
     private void setPercent(float percent) {
         mPercent = percent;
-        if(percent == 0f && mFlameAnimator.isRunning()) {
+        if(Float.compare(percent, 0f) == 0 && mFlameAnimator.isRunning()) {
             mFlameAnimator.cancel();
         } else if(!mFlameAnimator.isRunning()) {
             mFlameAnimator.start();
@@ -430,9 +436,20 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     public void stop() {
         mIsAnimationStarted = false;
         mSkipRocketAnimation = false;
-        mRocketAnimator.cancel();
-        mCurveAnimator.cancel();
+        cancelAnimation();
         resetOrigins();
+    }
+
+    /**
+     * Cancel animation without reset to start positions
+     */
+    void cancelAnimation() {
+        if (mRocketAnimator != null) {
+            mRocketAnimator.cancel();
+        }
+        if (mCurveAnimator != null) {
+            mCurveAnimator.cancel();
+        }
     }
 
     @Override
@@ -448,9 +465,11 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
     @Override
     protected void setupAnimations() {
         //rocket animation
-        mRocketAnimator.cancel();
+        if (mRocketAnimator != null) {
+            mRocketAnimator.cancel();
+        }
+        mRocketAnimator = ValueAnimator.ofFloat(0f, 1f);
         mRocketAnimator.setDuration(mConfig.getRocketAnimDuration());
-        mRocketAnimator.setFloatValues(0f, 1f);
         mRocketAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -468,16 +487,19 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         });
 
         //curve animation
-        mCurveAnimator.cancel();
-        mCurveAnimator.setDuration(mConfig.getRocketAnimDuration() * 2);
-
-        mCurveAnimator.setValues(
+        if (mCurveAnimator != null) {
+            mCurveAnimator.cancel();
+        }
+        mCurveAnimator = ValueAnimator.ofPropertyValuesHolder(
                 PropertyValuesHolder.ofFloat("force", 1f, 0f),
                 PropertyValuesHolder.ofFloat("value", (float) Math.PI, (float) (3f / 2f * Math.PI * 3f)));
+        mCurveAnimator.setDuration(mConfig.getRocketAnimDuration() * 2);
         mCurveAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                if(mPercent == 0f) return;
+                if (Float.compare(mPercent, 0f) == 0) {
+                    return;
+                }
                 float force = (float) valueAnimator.getAnimatedValue("force");
                 float value = (float) valueAnimator.getAnimatedValue("value");
 
@@ -485,21 +507,6 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 mCurveTargetPointAnimValue = !mSkipRocketAnimation ? -(float) (maxDy * Math.cos(value) * force) : 0f;
                 if (mSkipRocketAnimation) {
                     valueAnimator.cancel();
-                }
-            }
-        });
-
-        //offset animation
-        mOffsetAnimator.cancel();
-        mOffsetAnimator.setDuration(getConfig().getOffsetAnimDuration());
-        mOffsetAnimator.setInterpolator(new DecelerateInterpolator());
-        mOffsetAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                View targetView = mParent.getTargetView();
-                if(targetView != null) {
-                    //noinspection ResourceType
-                    targetView.setTop(mSkipRocketAnimation ? (int) getCurveYStart() : (Integer) valueAnimator.getAnimatedValue());
                 }
             }
         });
@@ -512,6 +519,25 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
                 if(targetView != null) {
                     mOffsetAnimator.setIntValues(targetView.getTop(), (int) getCurveYStart());
                     mOffsetAnimator.start();
+                }
+            }
+        });
+
+
+        //offset animation
+        if (mOffsetAnimator != null) {
+            mOffsetAnimator.cancel();
+        }
+        mOffsetAnimator = new ValueAnimator();
+        mOffsetAnimator.setDuration(getConfig().getOffsetAnimDuration());
+        mOffsetAnimator.setInterpolator(new DecelerateInterpolator());
+        mOffsetAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                View targetView = mParent.getTargetView();
+                if(targetView != null) {
+                    //noinspection ResourceType
+                    targetView.setTop(mSkipRocketAnimation ? (int) getCurveYStart() : (Integer) valueAnimator.getAnimatedValue());
                 }
             }
         });
@@ -547,6 +573,7 @@ class FireworkRefreshDrawable extends BaseRefreshDrawable {
         }
     }
 
+    @SuppressWarnings("unused")
     private float[] mapPoints(Canvas canvas, float x, float y) {
         mPointCache[0] = x;
         mPointCache[1] = y;
