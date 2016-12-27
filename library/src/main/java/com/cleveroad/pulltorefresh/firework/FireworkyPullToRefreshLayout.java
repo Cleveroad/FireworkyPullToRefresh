@@ -418,20 +418,16 @@ public class FireworkyPullToRefreshLayout extends ViewGroup {
                 mRefreshView.clearAnimation();
                 mRefreshView.startAnimation(mAnimateToCorrectPosition);
 
-                if (mIsRefreshing) {
-                    mRefreshDrawable.start();
-                    if (notify && null != mOnRefreshListener) {
-                        mOnRefreshListener.onRefresh();
-                    }
-                } else {
-                    mRefreshDrawable.stop();
-                    animateOffsetToStartPosition();
+                mRefreshDrawable.start();
+                if (notify && null != mOnRefreshListener) {
+                    mOnRefreshListener.onRefresh();
                 }
 
                 mCurrentOffsetTop = mTarget.getTop();
                 mTarget.setPadding(mTargetPaddingLeft, mTargetPaddingTop, mTargetPaddingRight, mTargetPaddingBottom);
             } else {
                 animateOffsetToStartPosition();
+                mRefreshDrawable.cancelAnimation();
             }
         }
     }
