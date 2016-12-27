@@ -17,7 +17,7 @@ What will you receive by using the Fireworky Pull To Refresh component in your a
 ### Installation ###
 by Gradle:
 ```groovy
-    compile 'com.cleveroad:fireworkypulltorefresh:1.0.2'
+    compile 'com.cleveroad:fireworkypulltorefresh:1.0.3'
 ```
 or just download zip and import module "fireworky-pull-to-refresh" to be able to modify the sources.
 ### Supported Views ###
